@@ -41,7 +41,7 @@ public class ChatController {
 
     @GetMapping("/hello")
     public Greeting get() {
-        return new Greeting("Michael");
+        return new Greeting("Michael is the best");
     }
 
 
