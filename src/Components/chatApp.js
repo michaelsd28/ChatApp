@@ -1,5 +1,10 @@
 import React from "react";
 import "../Css/chat.css";
+import FriendMessageBox from "./Message/FriendMessageBox";
+import MessageBox from "./Message/MessageBox";
+import ProfileCard from "./Profile/ProfileCard";
+
+var avatar1 = process.env.PUBLIC_URL + "/images/avatar1.png";
 
 function ChatApp() {
   return (
@@ -24,86 +29,27 @@ function ChatApp() {
                   />
                 </div>
                 <ul className="list-unstyled chat-list mt-2 mb-0">
-                  <li className="clearfix">
-                    <img
-                      src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                      alt="avatar"
-                    />
-                    <div className="about">
-                      <div className="name">Vincent Porter</div>
-                      <div className="status">
-                        {" "}
-                        <i className="fa fa-circle offline"></i> left 7 mins ago{" "}
-                      </div>
-                    </div>
-                  </li>
-                  <li className="clearfix active">
-                    <img
-                      src="https://bootdey.com/img/Content/avatar/avatar2.png"
-                      alt="avatar"
-                    />
-                    <div className="about">
-                      <div className="name">Aiden Chavez</div>
-                      <div className="status">
-                        {" "}
-                        <i className="fa fa-circle online"></i> online{" "}
-                      </div>
-                    </div>
-                  </li>
-                  <li className="clearfix">
-                    <img
-                      src="https://bootdey.com/img/Content/avatar/avatar3.png"
-                      alt="avatar"
-                    />
-                    <div className="about">
-                      <div className="name">Mike Thomas</div>
-                      <div className="status">
-                        {" "}
-                        <i className="fa fa-circle online"></i> online{" "}
-                      </div>
-                    </div>
-                  </li>
-                  <li className="clearfix">
-                    <img
-                      src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                      alt="avatar"
-                    />
-                    <div className="about">
-                      <div className="name">Christian Kelly</div>
-                      <div className="status">
-                        {" "}
-                        <i className="fa fa-circle offline"></i> left 10 hours
-                        ago{" "}
-                      </div>
-                    </div>
-                  </li>
-                  <li className="clearfix">
-                    <img
-                      src="https://bootdey.com/img/Content/avatar/avatar8.png"
-                      alt="avatar"
-                    />
-                    <div className="about">
-                      <div className="name">Monica Ward</div>
-                      <div className="status">
-                        {" "}
-                        <i className="fa fa-circle online"></i> online{" "}
-                      </div>
-                    </div>
-                  </li>
-                  <li className="clearfix">
-                    <img
-                      src="https://bootdey.com/img/Content/avatar/avatar3.png"
-                      alt="avatar"
-                    />
-                    <div className="about">
-                      <div className="name">Dean Henry</div>
-                      <div className="status">
-                        {" "}
-                        <i className="fa fa-circle offline"></i> offline since
-                        Oct 28{" "}
-                      </div>
-                    </div>
-                  </li>
+                  <ProfileCard
+                    img={
+                      "https://www.bootdey.com/img/Content/avatar/avatar8.png"
+                    }
+                    name="Ambar Santana"
+                    status="online"
+                  />
+
+                  <ProfileCard
+                    img={avatar1}
+                    name="Michael Santana"
+                    status="online"
+                  />
+
+                  <ProfileCard
+                    img={
+                      "https://ae01.alicdn.com/kf/HTB1_P7BaWL7gK0jSZFBq6xZZpXaL.jpg"
+                    }
+                    name="Mauricio Rodriguez"
+                    status="online"
+                  />
                 </ul>
               </div>
               <div className="chat">
@@ -155,42 +101,19 @@ function ChatApp() {
                 </div>
                 <div className="chat-history">
                   <ul className="m-b-0">
-                    <li className="clearfix">
-                      <div className="message-data text-right">
-                        <span className="message-data-time">
-                          10:10 AM, Today
-                        </span>
-                        <img
-                          src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                          alt="avatar"
-                        />
-                      </div>
-                      <div className="message other-message float-right">
-                        {" "}
-                        Hi Aiden, how are you? How is the project coming along?{" "}
-                      </div>
-                    </li>
-                    <li className="clearfix">
-                      <div className="message-data">
-                        <span className="message-data-time">
-                          10:12 AM, Today
-                        </span>
-                      </div>
-                      <div className="message my-message">
-                        Are we meeting today?
-                      </div>
-                    </li>
-                    <li className="clearfix">
-                      <div className="message-data">
-                        <span className="message-data-time">
-                          10:15 AM, Today
-                        </span>
-                      </div>
-                      <div className="message my-message">
-                        Project has been already finished and I have results to
-                        show you.
-                      </div>
-                    </li>
+                    <MessageBox
+                      text={
+                        "Hi Aiden, how are you? How is the project coming along?"
+                      }
+                    />
+                    <MessageBox text={"is everything ok ?"} />
+
+                    <FriendMessageBox text="Are we meeting today?" />
+
+                    <FriendMessageBox
+                      text="Project has been already finished and I have results to
+                        show you."
+                    />
                   </ul>
                 </div>
                 <div className="chat-message clearfix">
