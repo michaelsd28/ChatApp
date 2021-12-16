@@ -48,7 +48,7 @@ fun Application.configureSockets() {
             val thisConnection = Connection(this)
 
             connections += thisConnection
-            send("You've logged in as [${thisConnection}]")
+            send("You've logged in as [${thisConnection}] ")
 
 
             for (frame in incoming) {
