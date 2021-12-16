@@ -1,15 +1,23 @@
 import React from "react";
 import ChatApp from "./Components/ChatApp";
+import WebSocketClient from "./Components/Message/WebSocketClient";
 
-import Test from "./Components/Test";
 
 function App() {
   return (
-    <div>
+    <div
+      style={{
+        backgroundColor: "black",
+        color: "white",
+        height: "200vh",
+        top: -20,
+        position: "relative"
+      }}
+    >
       <h1>Hello World</h1>
-     <ChatApp/>
-      <Test />
-      <h1>Bellow</h1>
+      <WebSocketClient />
+
+      <ChatApp/>
     </div>
   );
 }
