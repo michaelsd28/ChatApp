@@ -1,11 +1,16 @@
-import React from "react";
+import React,{useContext} from "react";
+import { DataContext } from "../GenetalContext";
 
-function FriendMessageBox({text}) {
+function FriendMessageBox({text,time}) {
+
+
   return (
     <>
-      <li className="clearfix">
+      <li
+  
+      className="clearfix">
         <div className="message-data">
-          <span className="message-data-time">10:12 AM, Today</span>
+          <span className="message-data-time">{time}</span>
         </div>
         <div className="message my-message">{text}</div>
       </li>

@@ -1,33 +1,92 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import "../Css/chat.css";
 import FriendMessageBox from "./Message/FriendMessageBox";
 import MessageBox from "./Message/MessageBox";
 import ProfileCard from "./Profile/ProfileCard";
+import $ from "jquery";
+import TopProfileCard from "./Profile/TopProfileCard";
+import TopButtons from "./Chat Components/TopButtons";
+import InputText from "./Chat Components/InputText";
+import SearchChat from "./Chat Components/SearchChat";
+import { DataContext } from "./GenetalContext";
 
 var avatar1 = process.env.PUBLIC_URL + "/images/avatar1.png";
 
 function ChatApp() {
+  const { state, setState } = useContext(DataContext);
+  /*
+  data class User(
+     id: UUID,
+     name: String,
+     password: String,
+     userName: String,
+     friends: List<UUID>,
+     messages: List<Message>
+)*/
+
+  const message = {
+    id: "001",
+    content: "my message",
+    user: "Michaelsd28",
+    date: Date
+  };
+  const User = {
+    id: "UUID",
+    name: "Michaelsd28",
+    password: "String",
+    userName: "Michaelsd28",
+    friends: ["ambar"],
+    messages: [message]
+  };
+
+  const User2 = {
+    id: "UUID",
+    name: "Ambar",
+    password: "String",
+    userName: "Ambar",
+    friends: ["ambar"],
+    messages: [message]
+  };
+
+  const message1 = {
+    id: "001",
+    content: "my message",
+    user: User,
+    date: Date
+  };
+
+  const message2 = {
+    id: "001",
+    content: "my message",
+    user: User2,
+    date: Date
+  };
+  const message3 = {
+    id: "001",
+    content: "my message",
+    user: User,
+    date: Date
+  };
+
+  const listMessages = [message1, message2, message3];
+
+  useEffect(() => {
+    // scroll to buttton
+
+    $(".chat-history").animate({ scrollTop: 10000 }, "slow");
+  }, []);
+
   return (
     <div>
-      <h1>Chat App</h1>
+      <h1>Chat App </h1>
 
       <div className="container">
         <div className="row clearfix">
           <div className="col-lg-12">
             <div className="card chat-app">
               <div id="plist" className="people-list">
-                <div className="input-group">
-                  <div className="input-group-prepend">
-                    <span className="input-group-text">
-                      <i className="fa fa-search"></i>
-                    </span>
-                  </div>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search..."
-                  />
-                </div>
+                <SearchChat />
+
                 <ul className="list-unstyled chat-list mt-2 mb-0">
                   <ProfileCard
                     img={
@@ -55,81 +114,39 @@ function ChatApp() {
               <div className="chat">
                 <div className="chat-header clearfix">
                   <div className="row">
-                    <div className="col-lg-6">
-                      <a
-                        href="javascript:void(0);"
-                        data-toggle="modal"
-                        data-target="#view_info"
-                      >
-                        <img
-                          src="https://bootdey.com/img/Content/avatar/avatar2.png"
-                          alt="avatar"
-                        />
-                      </a>
-                      <div className="chat-about">
-                        <h6 className="m-b-0">Aiden Chavez</h6>
-                        <small>Last seen: 2 hours ago</small>
-                      </div>
-                    </div>
-                    <div className="col-lg-6 hidden-sm text-right">
-                      <a
-                        href="javascript:void(0);"
-                        className="btn btn-outline-secondary"
-                      >
-                        <i className="fa fa-camera"></i>
-                      </a>
-                      <a
-                        href="javascript:void(0);"
-                        className="btn btn-outline-primary"
-                      >
-                        <i className="fa fa-image"></i>
-                      </a>
-                      <a
-                        href="javascript:void(0);"
-                        className="btn btn-outline-info"
-                      >
-                        <i className="fa fa-cogs"></i>
-                      </a>
-                      <a
-                        href="javascript:void(0);"
-                        className="btn btn-outline-warning"
-                      >
-                        <i className="fa fa-question"></i>
-                      </a>
-                    </div>
+                    <TopProfileCard />
+                    <TopButtons />
                   </div>
                 </div>
                 <div className="chat-history">
-                  <ul className="m-b-0">
-                    <MessageBox
-                      text={
-                        "Hi Aiden, how are you? How is the project coming along?"
+                  <ul className="m-b-0  chat-box">
+                    {listMessages.map((item) => {
+                    
+                      if (item.user.userName === "Michaelsd28") {
+
+                        return (
+                          <MessageBox 
+                          text={item.content} 
+                          time={"10:12 PM"} />
+                        );
+
+                      } else {
+
+                        return (
+                          <FriendMessageBox
+                            text={item.content}
+                            time={"10:12 PM"}
+                          />
+                        );
+                        
+
+
                       }
-                    />
-                    <MessageBox text={"is everything ok ?"} />
-
-                    <FriendMessageBox text="Are we meeting today?" />
-
-                    <FriendMessageBox
-                      text="Project has been already finished and I have results to
-                        show you."
-                    />
+                    })}
                   </ul>
                 </div>
-                <div className="chat-message clearfix">
-                  <div className="input-group mb-0">
-                    <div className="input-group-prepend">
-                      <span className="input-group-text">
-                        <i className="fa fa-send"></i>
-                      </span>
-                    </div>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter text here..."
-                    />
-                  </div>
-                </div>
+
+                <InputText />
               </div>
             </div>
           </div>
