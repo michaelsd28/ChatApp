@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.network.sockets.*
@@ -31,7 +32,9 @@ fun Application.configureSockets() {
                     is Frame.Text -> {
                         val text = frame.readText()
                         println("received: $text")
+
                         outgoing.send(Frame.Text("YOU SAID: $text"))
+                        outgoing.send(Frame.Text("I SAID: ${text.toUpperCase()}"))
                         if (text.equals("bye", ignoreCase = true)) {
                             close(CloseReason(CloseReason.Codes.NORMAL, "Client said BYE"))
                         }
@@ -42,26 +45,39 @@ fun Application.configureSockets() {
 
 
         } // end of websocketsSession
+
+
         val connections = Collections.synchronizedSet<Connection?>(LinkedHashSet())
-        webSocket("/multiple") {
+        webSocket("/multiple") {        // websockets multiple connections
 
             val thisConnection = Connection(this)
 
             connections += thisConnection
-            send("You've logged in as [${thisConnection}] ")
+            send("You've logged in as [${thisConnection.name}] ")
+
 
 
             for (frame in incoming) {
                 when (frame) {
                     is Frame.Text -> {
                         val receivedText = frame.readText()
+                        println("received: $receivedText  from ${thisConnection.name}")
                         val textWithUsername = "[${thisConnection}]: $receivedText"
+//                        outgoing.send(Frame.Text(textWithUsername))
+
                         connections.forEach {
-                            println("sending to $it")
+
+
+
+                            it.session.send(Frame.Text("received a text1: $receivedText from [${thisConnection.name}]"))
+                            it.session.outgoing.send(Frame.Text("received a text2: $receivedText from [${thisConnection.name}]"))
+
+
+                            println("sending to ${it.name}")
                         }
                     }
                     else -> {
-                        println("received $frame of type ${frame::class}")
+//                        println("received $frame of type ${frame::class}")
                     }
                 }
 
