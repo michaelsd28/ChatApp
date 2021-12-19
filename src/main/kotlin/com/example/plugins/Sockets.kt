@@ -1,15 +1,12 @@
 package com.example.plugins
 
-import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.http.cio.websocket.*
-import io.ktor.network.sockets.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
-import java.time.*
+import java.time.Duration
 import java.util.*
-import java.util.concurrent.atomic.*
+import java.util.concurrent.atomic.AtomicInteger
 
 fun Application.configureSockets() {
     install(WebSockets) {
@@ -23,9 +20,11 @@ fun Application.configureSockets() {
 
     routing {
 
-
+var sessions:Connection = Connection(this)
         webSocket("/ws") { // websocketSession
             println("you are connected ${++count}")
+
+
 
             for (frame in incoming) {
                 when (frame) {
@@ -52,8 +51,13 @@ fun Application.configureSockets() {
 
             val thisConnection = Connection(this)
 
+
+
             connections += thisConnection
             send("You've logged in as [${thisConnection.name}] ")
+
+
+
 
 
 
@@ -66,7 +70,6 @@ fun Application.configureSockets() {
 //                        outgoing.send(Frame.Text(textWithUsername))
 
                         connections.forEach {
-
 
 
                             it.session.send(Frame.Text("received a text1: $receivedText from [${thisConnection.name}]"))
