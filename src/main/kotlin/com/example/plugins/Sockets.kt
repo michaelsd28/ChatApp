@@ -20,10 +20,17 @@ fun Application.configureSockets() {
 
     routing {
 
-var sessions:Connection = Connection(this)
+        //5 max size
+
+        val sessions = mutableMapOf<String, WebSocketSession>()
+//        val loco:String = sessions
         webSocket("/ws") { // websocketSession
             println("you are connected ${++count}")
 
+
+            val sessionId = UUID.randomUUID().toString()
+            sessions[sessionId] = this
+            sessions[sessionId]?.send(Frame.Text("Welcome to the server $sessionId"))
 
 
             for (frame in incoming) {
@@ -31,9 +38,23 @@ var sessions:Connection = Connection(this)
                     is Frame.Text -> {
                         val text = frame.readText()
                         println("received: $text")
+                        val id = text.split(" ")[1]
+//51717aa8-591e-48df-91d5-9a978e749e7a
+                        if (text.contains("disconnect")) {
+                            sessions.remove(id)
+                            println("removed $id")
+                        }
 
-                        outgoing.send(Frame.Text("YOU SAID: $text"))
-                        outgoing.send(Frame.Text("I SAID: ${text.toUpperCase()}"))
+
+                        sessions.values.forEach {
+                            if (sessions[id] != it) {
+                                it.send(Frame.Text("$id  $text"))
+                            }
+                        }
+
+
+//                        outgoing.send(Frame.Text("YOU SAID: $text"))
+
                         if (text.equals("bye", ignoreCase = true)) {
                             close(CloseReason(CloseReason.Codes.NORMAL, "Client said BYE"))
                         }
@@ -51,13 +72,8 @@ var sessions:Connection = Connection(this)
 
             val thisConnection = Connection(this)
 
-
-
             connections += thisConnection
             send("You've logged in as [${thisConnection.name}] ")
-
-
-
 
 
 
