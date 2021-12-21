@@ -106,8 +106,6 @@ window.onunload = function (event) {
   }, []);
 
 
-
-
   if(connection !== null){
     connection.onmessage = (evt) => {
       if(evt.data.includes("Welcome to the server ")){
