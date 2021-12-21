@@ -76,7 +76,6 @@ fun Application.configureSockets() {
             send("You've logged in as [${thisConnection.name}] ")
 
 
-
             for (frame in incoming) {
                 when (frame) {
                     is Frame.Text -> {
@@ -84,13 +83,10 @@ fun Application.configureSockets() {
                         println("received: $receivedText  from ${thisConnection.name}")
                         val textWithUsername = "[${thisConnection}]: $receivedText"
 //                        outgoing.send(Frame.Text(textWithUsername))
-
                         connections.forEach {
-
 
                             it.session.send(Frame.Text("received a text1: $receivedText from [${thisConnection.name}]"))
                             it.session.outgoing.send(Frame.Text("received a text2: $receivedText from [${thisConnection.name}]"))
-
 
                             println("sending to ${it.name}")
                         }
@@ -102,7 +98,6 @@ fun Application.configureSockets() {
 
             }
         }
-
     }
 }
 
