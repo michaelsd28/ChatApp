@@ -168,8 +168,9 @@ body {
 }
 
 .chat .chat-history .other-message:after {
-  border-bottom-color: #e8f1f3;
+  border-bottom-color: #86c541;
   left: 80%;
+
 }
 
 .chat .chat-message {
@@ -255,14 +256,13 @@ body {
   }
 }
 
-
-
-
-.chat-history{
-  
-    max-height: 50vh;
-    overflow-y: scroll;
-    min-height: 40vh;
-
-  
+.chat-history {
+  max-height: 50vh;
+  overflow-y: scroll;
+  min-height: 40vh;
 }
+.chat-container{
+  background-color: #121212;
+  color: white;
+}
+

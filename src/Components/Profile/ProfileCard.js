@@ -1,15 +1,15 @@
 import React from "react";
 import "../../Css/chat.css";
 
-function ProfileCard({ img, name, status }) {
+function ProfileCard({ userFriend}) {
   return (
     <li className="clearfix">
-      <img src={img} alt="avatar" />
+      <img src={"userFriend.avatar"} alt="avatar" />
       <div className="about">
-        <div className="name">{name}</div>
+        <div className="name">{"userFriend.name"}</div>
         <div className="status">
   
-          <i className="fa fa-circle offline"></i> {status}
+          <i className="fa fa-circle offline"></i> online
         </div>
       </div>
     </li>

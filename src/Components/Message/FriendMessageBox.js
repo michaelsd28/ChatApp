@@ -19,3 +19,4 @@ function FriendMessageBox({text,time}) {
 }
 
 export default FriendMessageBox;
+// https://www.bootdey.com/img/Content/avatar/avatar8.png

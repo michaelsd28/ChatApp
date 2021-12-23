@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { DataContext } from "../GenetalContext";
 
-function TopProfileCard() {
+function TopProfileCard( {user} ) {
   return (
     <div class="col-lg-6">
       <a
@@ -10,12 +10,12 @@ function TopProfileCard() {
         data-target="#view_info"
       >
         <img
-          src="https://bootdey.com/img/Content/avatar/avatar2.png"
+          src={user.avatar}
           alt="avatar"
         />
       </a>
       <div class="chat-about">
-        <h6 class="m-b-0">Aiden Chavez</h6>
+        <h6 class="m-b-0">{user.name}</h6>
         <small>Last seen: 2 hours ago</small>
       </div>
     </div>
