@@ -121,7 +121,7 @@ fun Application.configureSockets() {
 
             val sessionId = UUID.randomUUID().toString()
             sessionsUser[sessionId] = this
-            sessionsUser[sessionId]?.send(Frame.Text("Welcome to the server $sessionId"))
+//            sessionsUser[sessionId]?.send(Frame.Text("Welcome to the server $sessionId"))
 
 
 
@@ -139,6 +139,7 @@ fun Application.configureSockets() {
                         if (text.contains("id-Client")) {
                             val id = text.split(" ")[1]
                             sessionsUser[id] = this
+                            sessionsUser[id]?.send(Frame.Text("Welcome to the server $id"))
                             println( "sessionsUser id: $id is active")
                         }
 
