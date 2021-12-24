@@ -134,6 +134,8 @@ fun Application.configureSockets() {
                         val text = frame.readText()
                         println("received: $text")
 
+
+
                         if (text.contains("id-Client")) {
                             val id = text.split(" ")[1]
                             sessionsUser[id] = this
@@ -148,27 +150,6 @@ fun Application.configureSockets() {
                             println(sendMessage.toString())
                             sessionsUser[sendMessage.userToID]?.send(Frame.Text(sendMessage.content))
                         }
-
-
-
-
-
-
-
-
-
-
-
-
-//                        try {
-//                            val message = Gson().fromJson(text, Message::class.java)
-//                            redisDB.receiveMessage(message)
-//                            println("received a valid message: $message")
-//                        } catch (e: Exception) {
-//                            e.printStackTrace()
-//                        }
-
-
 
 
 
