@@ -16,7 +16,7 @@ function WebSocketClient() {
 
   function connectWS() {
     if (connection == null) {
-      setConnection(new WebSocket("ws://localhost:8080/send"));
+      // setConnection(new WebSocket("ws://localhost:8080/send"));
       setConnected(true);
     }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, {  useContext } from "react";
 import "../Css/chat.css";
 import FriendMessageBox from "./Message/FriendMessageBox";
 import MessageBox from "./Message/MessageBox";
@@ -13,17 +13,30 @@ import { DataContext } from "./GenetalContext";
 var avatar1 = process.env.PUBLIC_URL + "/images/avatar1.png";
 
 function ChatApp() {
-  const { state, setState, user,id,setId } = useContext(DataContext);
+  const { state, setState, user,id,setId,messages, setMessages,friendID, setFriendID } = useContext(DataContext);
 
 
-  useEffect(() => {
+
+
+
+  React.useEffect(() => {
     // scroll to buttton
 
     $(".chat-history").animate({ scrollTop: 10000 }, "slow");
-  }, []);
 
+    
+
+    
+  }, [id,setId]);
+
+
+
+
+ 
   return (
+
     <div>
+  
       <h1>Chat App </h1>
 
       <div className="container">
@@ -41,6 +54,14 @@ function ChatApp() {
             <div className="card chat-app  chat-container">
               <div id="plist" className="people-list">
                 <SearchChat />
+                <h3>friend id</h3>
+      <input 
+      onKeyDown={(e)=>{
+
+        setFriendID(e.target.value)
+      }
+      }
+      type="text"/>
 
                 <ul className="list-unstyled chat-list mt-2 mb-0">
                   {user.friends &&

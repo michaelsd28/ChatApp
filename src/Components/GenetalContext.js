@@ -9,39 +9,32 @@ export const DataProvider = ({ children }) => {
   const [id, setId] = useState("");
   const [whoTo, setWhoTo] = useState("");
   const [connection, setConnection] = useState(null);
-  const [messages, setMessages] = useState([]);
 
-  function setWSConnection(connectionws) {
-    setConnection(connectionws);
+  if(connection!=null){
+    connection.onopen = () => {
+      connection.send("id-Client " + id);
+    }
   }
+
+
+
+  const [messages, setMessages] = useState([]);
+  const [friendID, setFriendID] = useState("");
 
   React.useEffect(async () => {
     const response = await fetch("http://localhost:8080/user/" + id);
-    // waits until the request completes...
+    
+
     const data = await response.json();
+
+    setConnection(new WebSocket("ws://localhost:8080/send"));
+
 
     setUser(data);
 
-  
 
-  }, [setId, id, setUser]);
+  }, [id,setId]);
 
-  const ws = new WebSocket("ws://localhost:8080/send");
-  const ws2 = new WebSocket("ws://localhost:8080/send");
-
-  ws.onopen = () => {
-    console.log("WebSocket Client Connected");
-    ws.send("id-Client " + id);
-  };
-  ws.onmessage = (evt) => {
-    console.log(evt.data +"  " + id);
-
-    if (evt.data.includes("message ")) {
-      // let message = evt.data.replace("message ", "");
-      // setMessages((messages) => [...messages, message]);
-      // console.log(evt.data);
-    }
-  };
 
 
 
@@ -58,8 +51,12 @@ export const DataProvider = ({ children }) => {
         setId,
         whoTo,
         setWhoTo,
-        messages, 
-        setMessages
+        messages,
+        setMessages,
+        friendID,
+        setFriendID,
+        connection,
+        setConnection,
       }}
     >
       {children}

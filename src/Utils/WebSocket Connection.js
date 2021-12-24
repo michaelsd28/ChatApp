@@ -1,7 +1,7 @@
 let stompClient = null;
 
 export function connectWS(sendCallback, receiveCallback) {
-  const socket = new WebSocket("ws://localhost:8080/send");
+  // const socket = new WebSocket("ws://localhost:8080/send");
 
   socket.onopen = () => {
     console.log("WebSocket Client Connected");
@@ -28,7 +28,7 @@ export function connectWS(sendCallback, receiveCallback) {
 }
 
 export function disconnectWS(disconnectCallback) {
-    let socket = new WebSocket("ws://localhost:8080/send");
+    // let socket = new WebSocket("ws://localhost:8080/send");
 
     socket.send("disconnect " + sessionId);
     socket.close();
