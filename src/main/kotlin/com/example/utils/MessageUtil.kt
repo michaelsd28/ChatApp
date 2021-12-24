@@ -3,20 +3,12 @@ package com.example.utils
 import com.example.models.Message
 import com.example.models.User
 import com.google.gson.Gson
+import io.ktor.http.cio.websocket.*
 
 class MessageUtil {
 
 
-    fun isValidUser(user:String):Boolean{
-        try {
-            Gson().fromJson(user,User::class.java)
-            return true
-        } catch (e:Exception){
 
-            e.printStackTrace()
-            return false
-        }
-    }
 
     fun isValidMessage(message:String):Boolean{
         try {
@@ -47,6 +39,6 @@ fun main() {
 
     val string:String = Gson().toJson(test)
 
-    println(check.isValidUser(string))
+
 
 }
