@@ -7,39 +7,23 @@ function InputText() {
   const { setUserInputText, messages, setMessages, id, friendID, setFriendID,connection } =
     useContext(DataContext);
 
-    const [chatMessages, setChatMessages] = React.useState([]);
+
 
   let msg = new Message("001", "", id, new Date(), friendID);
 
 
 
-
-// console.log(id," this is id")
-
-
-  // const ws = new WebSocket("ws://localhost:8080/send");
-
   React.useEffect(() => {
-
-
-
-
     if(connection!=null){
     connection.onmessage = (evt) => {
         console.log(evt.data);
         setMessages((myMessages) => [...myMessages, evt.data]);
     }
   }
-    console.log("this is id", id);
-
  
 }, [id,connection])
 
-  // this.id = id;
-  // this.content = content
-  // this.MyUserID = MyUserID;
-  // this.date = date;
-  // this.userToID = userToID;
+
 
   return (
     <div className="chat-message clearfix">

@@ -1,6 +1,7 @@
 import React from "react";
+import LoginPage from "./Components/Chat Components/LoginPage";
 import ChatApp from "./Components/ChatApp";
-import {DataProvider} from "./Components/GenetalContext";
+import { DataProvider } from "./Components/GenetalContext";
 import WebSocketClient from "./Components/Message/WebSocketClient";
 import ProfileCard from "./Components/Profile/ProfileCard";
 
@@ -19,11 +20,11 @@ function App() {
             }}
           >
             <h1>Hello World</h1>
-            {/* <WebSocketClient /> */}
 
             <ChatApp />
           </div>
         </DataProvider>
+        {/* <LoginPage /> */}
       </div>
     </>
   );
