@@ -1,7 +1,9 @@
 import React,{useContext} from "react";
 import { DataContext } from "../GenetalContext";
 
-function FriendMessageBox({text,time}) {
+function FriendMessageBox({message}) {
+
+  const [messageData,setMessageData] = React.useState(message);
 
 
   return (
@@ -10,9 +12,9 @@ function FriendMessageBox({text,time}) {
   
       className="clearfix">
         <div className="message-data">
-          <span className="message-data-time">{time}</span>
+          <span className="message-data-time">{messageData.date}</span>
         </div>
-        <div className="message my-message">{text}</div>
+        <div className="message my-message">{messageData.content}</div>
       </li>
     </>
   );

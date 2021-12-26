@@ -1,6 +1,7 @@
 import React from "react";
 
-function MessageBox({ text,time }) {
+function MessageBox({ message }) {
+  const [ messageData, setMessageData ] = React.useState(message);
   return (
     <>
       <li className="clearfix">
@@ -8,12 +9,12 @@ function MessageBox({ text,time }) {
  
       className="message-data text-right">
         <span style={{ fontSize: 10 }} className="message-data-time">
-          {time}
+          {messageData.date}
         </span>
       </div>
       <div 
       style={{backgroundColor:"#86c541"}}
-      className="message other-message float-right my-message">{text}</div>
+      className="message other-message float-right my-message">{messageData.content}</div>
       </li>
     </>
   );

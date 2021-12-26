@@ -1,7 +1,9 @@
 import React from "react";
+import $ from "jquery";
 import "../../Css/LoginPage.css";
 
 function LoginPage() {
+
   return (
     <>
       <div id="logingPage" className="loginBox">
@@ -14,8 +16,25 @@ function LoginPage() {
         <h3>Sign in here</h3>
         <form
           className="form-group"
-          onSubmit={(e) => {
+          onSubmit={ async (e) => {
             e.preventDefault();
+            let username = $("#username").val();
+            let password = $("#password").val();
+
+            let data = await fetch("http://localhost:8080/signin/"+username+"/"+password )
+            let response = await data.json();
+
+            console.log(username,password,response);
+
+            if(response.response==="invalid username or password"){
+              alert("invalid username or password")
+            }else{
+              localStorage.setItem("jwt",response.response);
+              // refresh page
+              window.location.reload();
+            }
+
+
           }}
         >
           <div className="inputBox">
@@ -30,7 +49,7 @@ function LoginPage() {
                 width: "100%",
                 height: "40px"
               }}
-              id="uname"
+              id="username"
               type="text"
               name="Username"
               placeholder="Username"
@@ -46,7 +65,7 @@ function LoginPage() {
                 width: "100%",
                 height: "40px"
               }}
-              id="pass"
+              id="password"
               type="password"
               name="Password"
               placeholder="Password"
@@ -65,7 +84,9 @@ function LoginPage() {
               fontSize: "20px",
               fontWeight: "bold",
               marginTop: "10px",
-              float: "left"
+              float: "left",
+              padding: "10px",
+              textAlign: "left"
             }}
           >
             Sign-Up

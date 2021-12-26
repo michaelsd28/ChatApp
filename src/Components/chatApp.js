@@ -1,4 +1,4 @@
-import React, {  useContext } from "react";
+import React, { useContext } from "react";
 import "../Css/chat.css";
 import FriendMessageBox from "./Message/FriendMessageBox";
 import MessageBox from "./Message/MessageBox";
@@ -9,77 +9,49 @@ import TopButtons from "./Chat Components/TopButtons";
 import InputText from "./Chat Components/InputText";
 import SearchChat from "./Chat Components/SearchChat";
 import { DataContext } from "./GenetalContext";
-
-var avatar1 = process.env.PUBLIC_URL + "/images/avatar1.png";
+import { Message } from "../Classes/Messsage";
 
 function ChatApp() {
-  const { state, setState, user,id,setId,messages, setMessages,friendID, setFriendID } = useContext(DataContext);
+  const { user, id, setId, friendID, setFriendID } = useContext(DataContext);
 
-
-
-
+  const [messages, setMessages] = React.useState([]);
 
   React.useEffect(() => {
     // scroll to buttton
 
     $(".chat-history").animate({ scrollTop: 10000 }, "slow");
+  }, [id, setId]);
 
-    
-
-    
-  }, [id,setId]);
-
-
-
-
- 
   return (
-
     <div>
-  
-      <h1>Chat App </h1>
-
-      <div className="container">
-        <h1>Enter your id</h1>
-        <input 
-        onChange={(e)=>{
-             
-          setId(e.target.value)
+      <div
+        style={{
+          position: "relative",
+          top: "10vh"
         }}
-        
-        
-        type="text" placeholder="Enter your id" />
+        className="container"
+      >
         <div className="row clearfix ">
+     
           <div className="col-lg-12">
             <div className="card chat-app  chat-container">
               <div id="plist" className="people-list">
                 <SearchChat />
-                <h3>friend id</h3>
-      <input 
-      onKeyDown={(e)=>{
-
-        setFriendID(e.target.value)
-      }
-      }
-      type="text"/>
 
                 <ul className="list-unstyled chat-list mt-2 mb-0">
                   {user.friends &&
                     user.friends.map((friend) => {
                       return (
-                        <li className="clearfix">
-                          <img src={friend.avatar} alt="avatar" />
-                          <div className="about">
-                            <div className="name">{friend.name}</div>
-                            <div className="status">
-                              <i className="fa fa-circle online"></i> online
-                            </div>
-                          </div>
-                        </li>
+                        <div
+                          onClick={() => {
+                            setMessages(friend.messages);
+                            setFriendID(friend.id);
+                          }}
+                        >
+                          <ProfileCard userFriend={friend} />
+                        </div>
                       );
                     })}
-
-               
                 </ul>
               </div>
               <div className="chat">
@@ -91,30 +63,28 @@ function ChatApp() {
                 </div>
                 <div className="chat-history">
                   <ul className="m-b-0  chat-box">
-                    {user.friends &&
-                      user.friends.map((item) => {
-                        const messages = item.messages;
-
-
-                        return messages.map((e) => {
-                          if (e.userToID === user.id) {
-                            return (
-                              <MessageBox text={e.content} time={e.date} />
-                            );
-                          } else {
-                            return (
-                              <FriendMessageBox
-                                text={e.content}
-                                time={e.date}
-                              />
-                            );
-                          }
-                        });
-                      })}
+                    {messages.map((message) => {
+                      return (
+                        <div
+                          onClick={() => {
+                            setFriendID(message.userToID);
+                          }}
+                        >
+                          {message.MyUserID === user.id ? (
+                            <MessageBox message={message} />
+                          ) : (
+                            <FriendMessageBox message={message} />
+                          )}
+                        </div>
+                      );
+                    })}
                   </ul>
                 </div>
 
-                <InputText />
+                <InputText
+                  setMessageData={setMessages}
+                  messageData={messages}
+                />
               </div>
             </div>
           </div>
