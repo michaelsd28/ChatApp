@@ -11,32 +11,32 @@ time = time.toLocaleString("en-US", {
 
 function InputText({ messageData, setMessageData }) {
   // const [content , setContent] = useState("");
-  const {
-    messages,
-    setMessages,
-    id,
-    friendID,
-    connection
-  } = useContext(DataContext);
+  const { messages, friendID, connection,user } =
+    useContext(DataContext);
 
   const [date, setDate] = useState(new Date());
-  const [msg, setMsg] = useState(new Message("001", "", id, date, friendID));
   const [content, setContent] = useState("");
+  const [id, setId] = useState(user.id);
+
+
+
 
   React.useEffect(() => {
     if (connection != null) {
       connection.onmessage = (evt) => {
-        console.log(evt.data);
-        setMessages((messageData) => [...messageData, "mmg"]);
+        const data = JSON.parse(evt.data);
+        console.log(data)
+        setMessageData((messageData) => [...messageData, data]);
       };
     }
-  }, [id, connection, friendID, date, setDate, content, setContent]);
+
+    setId(user.id);
+
+
+  }, [id, connection, friendID, content, setContent,user]);
 
   return (
     <div className="chat-message clearfix">
-      <h2 style={{ border: "1px solid #86c541" }} onClick={() => {}}>
-        loco
-      </h2>
       {messages.map((item) => (
         <h1>{item}</h1>
       ))}
@@ -62,6 +62,8 @@ function InputText({ messageData, setMessageData }) {
             if (e.key === "Enter") {
               setMessageData((myMessages) => [...messageData, newMSG]);
               connection.send("request-send " + JSON.stringify(newMSG));
+
+              console.log(newMSG,"newMSG");
 
               e.target.value = "";
               setContent("");

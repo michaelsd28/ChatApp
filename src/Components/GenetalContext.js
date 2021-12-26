@@ -16,32 +16,6 @@ export const DataProvider = ({ children }) => {
       connection.send("id-Client " + user.id);
     };
   }
-  let obj = {
-    id: "018",
-    name: "ambar",
-    password: "123",
-    userName: "ambarsd18",
-    friends: [
-      {
-        id: "028",
-        name: "michael",
-        userName: "michaelsd18",
-        messages: [
-          {
-            id: "001",
-            content: "Hello Kotlin",
-            MyUserID: "028",
-            date: "Dec 22, 2021, 1:42:24 PM",
-            userToID: "018"
-          }
-        ],
-        avatar: "https://cdn-icons-png.flaticon.com/512/236/236832.png"
-      }
-    ],
-    messages: [],
-    groups: [],
-    avatar: "https://cdn-icons-png.flaticon.com/512/2922/2922561.png"
-  };
 
   React.useEffect(async () => {
     const token = localStorage.getItem("jwt");
@@ -51,9 +25,9 @@ export const DataProvider = ({ children }) => {
     const data = await response.json();
 
     setConnection(new WebSocket("ws://localhost:8080/send"));
-
-
     setUser(data);
+
+
   }, []);
 
   window.onbeforeunload = function () {
