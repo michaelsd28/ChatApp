@@ -11,29 +11,23 @@ time = time.toLocaleString("en-US", {
 
 function InputText({ messageData, setMessageData }) {
   // const [content , setContent] = useState("");
-  const { messages, friendID, connection,user } =
-    useContext(DataContext);
+  const { messages, friendID, connection, user } = useContext(DataContext);
 
   const [date, setDate] = useState(new Date());
   const [content, setContent] = useState("");
   const [id, setId] = useState(user.id);
 
-
-
-
   React.useEffect(() => {
     if (connection != null) {
       connection.onmessage = (evt) => {
         const data = JSON.parse(evt.data);
-        console.log(data)
+        console.log(data);
         setMessageData((messageData) => [...messageData, data]);
       };
     }
 
     setId(user.id);
-
-
-  }, [id, connection, friendID, content, setContent,user]);
+  }, [id, connection, friendID, content, setContent, user]);
 
   return (
     <div className="chat-message clearfix">
@@ -63,7 +57,7 @@ function InputText({ messageData, setMessageData }) {
               setMessageData((myMessages) => [...messageData, newMSG]);
               connection.send("request-send " + JSON.stringify(newMSG));
 
-              console.log(newMSG,"newMSG");
+              console.log(newMSG, "newMSG");
 
               e.target.value = "";
               setContent("");
