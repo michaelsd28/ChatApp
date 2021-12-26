@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -34,11 +35,15 @@ fun Application.configureRouting() {
 
     routing {
 
+    static("/static") {
+        resources("static")
+        default("index.html")
+    }
+
         get("/") {
 
-//            respond html
-            val file = File("src/main/resources/index.html")
-
+//            respond html with a body
+            val file = File("C:\\Users\\rd28\\Documents\\Coding\\IdeaProjects\\Kotlin\\chat-app\\src\\main\\resources\\index.html")
             call.respondText(file.readText(), ContentType.Text.Html)
         }
 

@@ -11,18 +11,8 @@ class Play {
 }
 
 fun main() {
-    val mesageutil: MessageUtil = MessageUtil()
-
-    val message:Message = Message(
-        "001",
-        "Hello Kotlin", "028",
-        Date(),
-        "018",
-    )
-
-    val string = "{\"id\":\"Hello World\",\"content\":\"Hello Kotlin\",\"MyUserID\":\"Hello World\",\"date\":\"Dec 22, 2021, 3:49:11 AM\",\"userToID\":\"Hello World\"}"
 
 
-    val message2:Message = Gson().fromJson(string, Message::class.java)
-    println(Gson().toJson(message))
+    val file = File("src/main/resources/index.html")
+    print(file.readText())
 }
