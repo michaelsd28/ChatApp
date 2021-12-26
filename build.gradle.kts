@@ -2,15 +2,31 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 
+
+
+
 plugins {
+    id("application")
+    id("com.github.johnrengelman.shadow") version "7.0.0"
+
     application
     kotlin("jvm") version "1.5.31"
 }
+tasks{
+    shadowJar {
+        manifest {
+            attributes(Pair("Main-Class", "com.example.ApplicationKt"))
+        }
+    }
+}
+
 
 group = "com.example"
 version = "0.0.1"
+
 application {
     mainClass.set("com.example.ApplicationKt")
+
 }
 
 repositories {
