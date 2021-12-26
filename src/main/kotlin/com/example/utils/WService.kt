@@ -15,12 +15,17 @@ class WService {
 
 
         val messageString = text.replace("request-send ", "")
-            val sendMessage: Message = Gson().fromJson(messageString, Message::class.java)
-            sessions[sendMessage.userToID]?.send(Frame.Text(sendMessage.content))
+        val sendMessage: Message = Gson().fromJson(messageString, Message::class.java)
+        sessions[sendMessage.userToID]?.send(Frame.Text(Gson().toJson(sendMessage)))
 
+        println("sent message to ${sendMessage.userToID}")
     }
 
-    suspend fun connectUser(sessions: MutableMap<String, WebSocketSession>, text: String,singleSession: WebSocketSession) {
+    suspend fun connectUser(
+        sessions: MutableMap<String, WebSocketSession>,
+        text: String,
+        singleSession: WebSocketSession
+    ) {
         val id = text.split(" ")[1]
         sessions[id] = singleSession
         sessions[id]?.send(Frame.Text("Welcome to the server $id"))

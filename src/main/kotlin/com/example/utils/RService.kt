@@ -1,11 +1,8 @@
 package com.example.utils
 
 import com.example.Database.RedisDB
-import com.example.models.Response
 import com.example.models.User
 import com.google.gson.Gson
-import io.ktor.application.*
-import io.ktor.response.*
 
 class RService {
     private val redisDB = RedisDB()

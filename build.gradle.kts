@@ -29,6 +29,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     // https://mvnrepository.com/artifact/redis.clients/jedis
     implementation("redis.clients:jedis:3.7.1")
+    implementation("com.auth0:java-jwt:3.18.2")
 
 
 }
