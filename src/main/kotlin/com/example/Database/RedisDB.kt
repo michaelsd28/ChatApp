@@ -78,7 +78,6 @@ fun main() {
         emptyList(),
         "https://cdn-icons-png.flaticon.com/512/236/236832.png"
     )
-
     val ambar: User = User(
         "018",
         "ambar",
@@ -89,7 +88,6 @@ fun main() {
         mutableListOf(),
         "https://cdn-icons-png.flaticon.com/512/2922/2922561.png"
     )
-
     val ambarFriendUser: FriendUser = FriendUser(
         "018",
         "ambar",
@@ -107,7 +105,6 @@ fun main() {
     )
     michael.addFriend(ambarFriendUser)
     ambar.addFriend(michaelFriendUser)
-
 
 //    val userString = Gson().toJson(michael)
 
