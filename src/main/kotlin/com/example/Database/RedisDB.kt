@@ -126,16 +126,9 @@ fun main() {
         "028"
     )
 
-
-
-
-
     val michaelString = Gson().toJson(michael)
     val ambarString = Gson().toJson(ambar)
     println(michaelString)
     println(ambarString)
-
-
-
     println(db.connect().get("018"))
 }
