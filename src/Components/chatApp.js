@@ -10,6 +10,7 @@ import InputText from "./Chat Components/InputText";
 import SearchChat from "./Chat Components/SearchChat";
 import { DataContext } from "./GenetalContext";
 import { Message } from "../Classes/Messsage";
+import AddFriend from "./Chat Components/AddFriend";
 
 function ChatApp() {
   const { user, id, setId, friendID, setFriendID } = useContext(DataContext);
@@ -24,6 +25,7 @@ function ChatApp() {
 
   return (
     <div>
+
       <div
         style={{
           position: "relative",
@@ -32,12 +34,11 @@ function ChatApp() {
         className="container"
       >
         <div className="row clearfix ">
-     
           <div className="col-lg-12">
             <div className="card chat-app  chat-container">
               <div id="plist" className="people-list">
                 <SearchChat />
-
+                <AddFriend/>
                 <ul className="list-unstyled chat-list mt-2 mb-0">
                   {user.friends &&
                     user.friends.map((friend) => {

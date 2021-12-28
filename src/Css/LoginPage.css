@@ -10,6 +10,11 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   overflow: hidden;
+
+
+    overflow-y: scroll;
+
+
 }
 
 
