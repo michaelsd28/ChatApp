@@ -18,13 +18,11 @@ let friend = {
 };
 
 function ProfileCard({ userFriend }) {
-
   const [user, setUser] = React.useState(userFriend);
-
 
   return (
     <li className="clearfix">
-      <img src={ user.avatar} alt="avatar" />
+      <img src={user.avatar} alt="avatar" />
       <div className="about">
         <div className="name">{user.name}</div>
         <div className="status">

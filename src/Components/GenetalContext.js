@@ -20,8 +20,6 @@ export const DataProvider = ({ children }) => {
   React.useEffect(async () => {
     const token = localStorage.getItem("jwt");
     const response = await fetch("http://localhost:8080/user/" + token);
-
-
     const data = await response.json();
 
     setConnection(new WebSocket("ws://localhost:8080/send"));

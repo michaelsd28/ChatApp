@@ -4,7 +4,7 @@ import "../../Css/LoginPage.css";
 import RegisterUser from "../../Utils/RegisterUser";
 
 function LoginPage() {
-  const [isLogin, setIsLogin] = React.useState(false);
+  const [isLogin, setIsLogin] = React.useState(true);
 
   return (
     <>
@@ -82,7 +82,13 @@ function LoginPage() {
           </a>
           <div className="text-center">
             <button
-              onClick={() => {}}
+              onClick={() => {
+
+
+                setIsLogin(false);
+
+
+              }}
               className="btn btn-link"
               style={{
                 color: "white",
@@ -110,7 +116,7 @@ function LoginPage() {
           }}
           className="container RegisterUser-container"
         >
-   <RegisterUser/>
+   <RegisterUser setLogin={setIsLogin} />
         </div>
       )}
     </>

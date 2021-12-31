@@ -12,6 +12,7 @@ import { DataContext } from "./GenetalContext";
 import { Message } from "../Classes/Messsage";
 import AddFriend from "./Chat Components/AddFriend";
 
+
 function ChatApp() {
   const { user, id, setId, friendID, setFriendID } = useContext(DataContext);
 

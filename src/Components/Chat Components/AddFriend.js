@@ -1,14 +1,22 @@
-import React from "react";
+import React,{useContext} from "react";
 import $ from "jquery";
 import PromptAddUser from "../../Utils/PromptAddUser";
 import { adduserBTN } from "../../Classes/Functions";
+import { DataContext } from "../GenetalContext";
 
 function AddFriend() {
-  // $(".addUser-btn").on("click", function () {
-
-  // });
 
   const [addUserPrompt, setAddUserPrompt] = React.useState(false);
+
+
+  // val id: String,
+  // val name: String,
+  // val userName: String,
+  // var messages: List<Message>,
+  // val avatar: String,
+
+
+
 
   return (
     <>
