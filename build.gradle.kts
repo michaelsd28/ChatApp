@@ -12,7 +12,7 @@ plugins {
     application
     kotlin("jvm") version "1.5.31"
 }
-tasks{
+tasks {
     shadowJar {
         manifest {
             attributes(Pair("Main-Class", "com.example.ApplicationKt"))
@@ -40,12 +40,12 @@ dependencies {
     implementation("org.webjars:jquery:3.2.1")
     implementation("io.ktor:ktor-websockets:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-    // https://mvnrepository.com/artifact/redis.clients/jedis
-    implementation("redis.clients:jedis:3.7.1")
-    implementation("com.auth0:java-jwt:3.18.2")
+    implementation("ch.qos.logback:logback-classic:$logback_version")
 
+    // https://mvnrepository.com/artifact/redis.clients/jedis
+    implementation("redis.clients:jedis:4.0.0")
+    implementation("com.auth0:java-jwt:3.18.2")
 
 }

@@ -33,3 +33,7 @@ data class User(
         groups = groups.minus(group)
     }
 }
+
+fun main() {
+
+}

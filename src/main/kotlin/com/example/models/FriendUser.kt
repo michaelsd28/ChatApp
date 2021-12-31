@@ -5,7 +5,7 @@ data class FriendUser(
     val name: String,
     val userName: String,
     var messages: List<Message>,
-    val avatar: String,
+    var avatar: String,
 
 
     )
