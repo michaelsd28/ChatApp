@@ -107,9 +107,7 @@ function PromptAddUser({ setVisibility, visibility }) {
 
               let data = await post.json();
 
-              if (data.response === "Friend added") {
-                window.location.reload();
-              }
+              if (data.response === "Friend added") window.location.reload();
 
               console.log(data);
 

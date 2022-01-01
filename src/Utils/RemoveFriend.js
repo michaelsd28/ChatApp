@@ -1,41 +1,26 @@
 import React from "react";
+import RemoveFriendPrompt from "./RemoveFriendPrompt";
 
 function RemoveFriend() {
-  let friend = {
-    id: "018",
-    name: "ambar",
 
-    userName: "ambarsd18",
-    messages: [
-      {
-        id: "001",
-        content: "Hello Kotlin",
-        MyUserID: "028",
-
-        date: "Dec 22, 2021, 1:42:24 PM",
-        userToID: "018"
-      }
-    ],
-    avatar: "https://cdn-icons-png.flaticon.com/512/2922/2922561.png"
-  };
+  const [show, setShow] = React.useState(true);
+  let friend = {};
   return (
+    <>
     <div>
       <button
-        onClick={async () => {
-          let post = await fetch("http://localhost:8080/removefriend", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(friend)
-          });
+        onClick={ () => {
+
+          setShow(!show);
+         
         }}
         style={{ margin: "0 10px 0 10px" }}
         className="btn btn-outline-warning"
       >
+        
         <img
           style={{
-            width: "2vw",
+            width: "25px",
             padding: "2px",
             margin: "0 10px 0 0px"
           }}
@@ -44,6 +29,20 @@ function RemoveFriend() {
         Remove Friend
       </button>
     </div>
+
+    <div 
+    
+    style={{
+      position: "absolute",
+      top:"50px"
+  }}
+    
+    >
+
+{show ? (<RemoveFriendPrompt />):(<></>)}
+
+    </div>
+    </>
   );
 }
 

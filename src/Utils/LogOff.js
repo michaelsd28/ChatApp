@@ -3,7 +3,6 @@ import React from 'react'
 function LogOff() {
     return (
         <div>
-         
             <button onClick={() => {
                 localStorage.removeItem("jwt");
                 window.location.reload();
@@ -12,7 +11,7 @@ function LogOff() {
                <img 
             style={{
              
-                width: "2vw",
+                width: "25px",
                 padding:"5px"
             }}
             src='images/logoff.png' alt='logoff'/> Log Off</button>
