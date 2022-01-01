@@ -2,7 +2,6 @@ package com.example.plugins
 
 import com.example.Database.RedisDB
 import com.example.models.FriendUser
-import com.example.models.Message
 import com.example.models.Response
 import com.example.models.User
 import com.example.utils.JWTService
@@ -16,6 +15,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.webjars.*
+import java.io.File
 import java.time.ZoneId
 
 
@@ -25,6 +25,7 @@ fun Application.configureRouting() {
         anyHost()
         header(HttpHeaders.ContentType)
         header(HttpHeaders.Authorization)
+
 
     }
 
@@ -47,10 +48,10 @@ fun Application.configureRouting() {
 
         get("/") {
 
-//            respond html with a body
-//            val file =
-//                File("C:\\Users\\rd28\\Documents\\Coding\\IdeaProjects\\Kotlin\\chat-app\\src\\main\\resources\\index.html")
-//            call.respondText(file.readText(), ContentType.Text.Html)
+            //respond html with a body
+            val file =
+                File("C:\\Users\\rd28\\Documents\\Coding\\IdeaProjects\\Kotlin\\chat-app\\src\\main\\resources\\index.html")
+            call.respondText(file.readText(), ContentType.Text.Html)
         }
 
 
@@ -98,7 +99,15 @@ fun Application.configureRouting() {
 
 
                 userDBJson.friends = userDBJson.friends.plus(friendUser)
-                friendUserDBJson.friends = friendUserDBJson.friends.plus(FriendUser( userDBJson.id, userDBJson.name, userDBJson.userName, userDBJson.messages, userDBJson.avatar))
+                friendUserDBJson.friends = friendUserDBJson.friends.plus(
+                    FriendUser(
+                        userDBJson.id,
+                        userDBJson.name,
+                        userDBJson.userName,
+                        userDBJson.messages,
+                        userDBJson.avatar
+                    )
+                )
 
 
                 redisDB.connect().set(friendUser.id, Gson().toJson(friendUserDBJson))
@@ -113,26 +122,53 @@ fun Application.configureRouting() {
         }
 
 
-    get("signin/{username}/{password}") {
+        get("signin/{username}/{password}") {
 
-        try {
-            val user = redisDB.connect().get(call.parameters["username"])
-            val userJson = Gson().fromJson(user, User::class.java)
-            userJson.avatar = "https://www.gravatar.com/avatar/"
-            if (userJson.password == call.parameters["password"]) {
-                val jwt = JWTService.createJWT(Gson().toJson(userJson))
-                call.respond(Response(jwt))
-            } else {
+            try {
+                val user = redisDB.connect().get(call.parameters["username"])
+                val userJson = Gson().fromJson(user, User::class.java)
+                userJson.avatar = "https://www.gravatar.com/avatar/"
+                if (userJson.password == call.parameters["password"]) {
+                    val jwt = JWTService.createJWT(Gson().toJson(userJson))
+                    call.respond(Response(jwt))
+                } else {
+                    call.respond(Response("invalid username or password"))
+                }
+
+            } catch (e: Exception) {
                 call.respond(Response("invalid username or password"))
             }
 
-        } catch (e: Exception) {
-            call.respond(Response("invalid username or password"))
+        }
+
+        post("delete-user/{delUserID}") {
+
+            val myUserID = call.receiveText()
+            try {
+                val delUserDB = redisDB.connect().get(call.parameters["delUserID"])
+                val delUserDBJson: User = Gson().fromJson(delUserDB, User::class.java)
+                delUserDBJson.friends = delUserDBJson.friends.filter { it.id != myUserID }
+
+                val myUser = redisDB.connect().get(myUserID)
+                val myUserJson: User = Gson().fromJson(myUser, User::class.java)
+                myUserJson.friends = myUserJson.friends.filter { it.id != call.parameters["delUserID"] }
+
+                redisDB.connect().set(call.parameters["delUserID"], Gson().toJson(delUserDBJson))
+                redisDB.connect().set(myUserID, Gson().toJson(myUserJson))
+
+
+            } catch (e: Exception) {
+                println("error")
+                call.respond(Response("Error deleting user"))
+            }
+
+            println("User deleted")
+            call.respond(Response("User deleted"))
+
+
         }
 
     }
-
-}
 
 
 }
