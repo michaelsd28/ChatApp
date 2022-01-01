@@ -11,6 +11,7 @@ import SearchChat from "./Chat Components/SearchChat";
 import { DataContext } from "./GenetalContext";
 import { Message } from "../Classes/Messsage";
 import AddFriend from "./Chat Components/AddFriend";
+//laptop changes
 
 
 function ChatApp() {
