@@ -1,27 +1,24 @@
 import React from "react";
 import "../../Css/chat.css";
+import $ from "jquery";
 
-let friend = {
-  id: "018",
-  name: "ambar",
-  userName: "ambarsd18",
-  messages: [
-    {
-      id: "001",
-      content: "Hello Kotlin",
-      MyUserID: "028",
-      date: "Dec 22, 2021, 1:42:24 PM",
-      userToID: "018"
-    }
-  ],
-  avatar: "https://cdn-icons-png.flaticon.com/512/2922/2922561.png"
-};
-
-function ProfileCard({ userFriend }) {
+function ProfileCard({ userFriend,index }) {
   const [user, setUser] = React.useState(userFriend);
 
   return (
-    <li className="clearfix">
+    <li 
+
+
+    
+    onClick={() => {
+
+      let currentBTN = $(`.user-li${index}`)
+
+        $(`.user-li${index}`).toggleClass("active");
+
+
+
+    }} className={`clearfix user-li${index}`}>
       <img src={user.avatar} alt="avatar" />
       <div className="about">
         <div className="name">{user.name}</div>

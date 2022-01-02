@@ -9,7 +9,13 @@ time = time.toLocaleString("en-US", {
   hour12: true
 });
 
-function InputText({ messageData, setMessageData,setMyFriend,myFriend }) {
+function InputText({
+  messageData,
+  setMessageData,
+  setMyFriend,
+  myFriend,
+  setUser
+}) {
   // const [content , setContent] = useState("");
   const {
     messages,
@@ -27,18 +33,16 @@ function InputText({ messageData, setMessageData,setMyFriend,myFriend }) {
   React.useEffect(() => {
     if (connection != null) {
       connection.onmessage = (evt) => {
+
         let message = JSON.parse(evt.data);
 
-        let myFriendTest01 = currentFriend
+        if (currentFriend.id === message.MyUserID) {
+          let myFriendTest01 = currentFriend;
+          myFriendTest01.messages.push(message);
+          setMyFriend({ ...myFriend, messages: myFriendTest01.messages });
+        }
 
-        myFriendTest01.messages.push(message);
 
-        setMyFriend({...myFriend, messages: myFriendTest01.messages});
-
-
- 
-
-        console.log(message);
       };
     }
 
@@ -84,11 +88,19 @@ function InputText({ messageData, setMessageData,setMyFriend,myFriend }) {
             newMSG.MyUserID = id;
 
             if (e.key === "Enter") {
-              setMessageData((myMessages) => [...messageData, newMSG]);
+
+
+  
+
+          
+                let myFriendTest01 = currentFriend;
+                myFriendTest01.messages.push(newMSG);
+                setMyFriend({ ...myFriend, messages: myFriendTest01.messages });
+              
+
+
+
               connection.send("request-send " + JSON.stringify(newMSG));
-
-
-
               e.target.value = "";
               setContent("");
             }

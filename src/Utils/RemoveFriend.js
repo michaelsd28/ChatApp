@@ -3,7 +3,7 @@ import RemoveFriendPrompt from "./RemoveFriendPrompt";
 
 function RemoveFriend() {
 
-  const [show, setShow] = React.useState(true);
+  const [show, setShow] = React.useState(false);
 
   return (
     <>

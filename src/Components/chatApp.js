@@ -17,7 +17,7 @@ function ChatApp() {
   const { user, id, setId, currentFriend, setCurrentFriend } =
     useContext(DataContext);
 
-    const[myFriend, setMyFriend] = React.useState(currentFriend);
+  const [myFriend, setMyFriend] = React.useState(currentFriend);
 
   const [messages, setMessages] = React.useState([]);
 
@@ -40,22 +40,25 @@ function ChatApp() {
             MyUserID: "028"
           };
 
-         
-          let myFriendTest01 = currentFriend
+          // let myFriendTest01 = currentFriend
 
-          myFriendTest01.messages.push(msg);
+          // myFriendTest01.messages.push(msg);
 
-          setMyFriend({...myFriend, messages: myFriendTest01.messages});
+          // setMyFriend({...myFriend, messages: myFriendTest01.messages});
 
-
-
-
-
+          console.log(myFriend);
+          console.log(currentFriend);
         }}
       >
         add message
       </button>
-      <button onClick={() => {}} className="btn btn-warning">
+      <button
+        onClick={() => {
+          console.log(myFriend.messages, "my friend");
+          console.log(currentFriend.messages, "current friend");
+        }}
+        className="btn btn-warning"
+      >
         get messages
       </button>
       <div
@@ -73,11 +76,12 @@ function ChatApp() {
                 <AddFriend />
                 <ul className="list-unstyled chat-list mt-2 mb-0">
                   {user.friends &&
-                    user.friends.map((friend) => {
+                    user.friends.map((friend, index) => {
                       return (
                         <div
                           onClick={() => {
                             setCurrentFriend(friend);
+                            setMyFriend(friend);
                           }}
                         >
                           <ProfileCard userFriend={friend} />
@@ -97,7 +101,16 @@ function ChatApp() {
                   <ul className="m-b-0  chat-box">
                     {myFriend.messages &&
                       myFriend.messages.map((message) => {
-                        return <MessageBox message={message} />;
+
+                        if(message.userToID === user.id){
+                          return <FriendMessageBox message={message} />;
+                        } else{
+                          return <MessageBox message={message} />;
+                      
+                        }
+
+                   
+
                       })}
 
                     {/* {currentFriend.messages && currentFriend.messages.map((message) => {
