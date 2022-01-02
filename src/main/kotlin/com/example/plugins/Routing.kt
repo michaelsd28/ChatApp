@@ -128,8 +128,10 @@ fun Application.configureRouting() {
                 val user = redisDB.connect().get(call.parameters["username"])
                 val userJson = Gson().fromJson(user, User::class.java)
                 userJson.avatar = "https://www.gravatar.com/avatar/"
+                userJson.friends = emptyList()
                 if (userJson.password == call.parameters["password"]) {
                     val jwt = JWTService.createJWT(Gson().toJson(userJson))
+                    println("${jwt} this is the jwt and this is the user $userJson")
                     call.respond(Response(jwt))
                 } else {
                     call.respond(Response("invalid username or password"))
