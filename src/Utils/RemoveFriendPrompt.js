@@ -7,7 +7,6 @@ function RemoveFriendPrompt() {
   const [id, setId] = React.useState(user.id);
   const [delUser, setDelUser] = React.useState(null);
 
-
   return (
     <>
       <div
@@ -32,22 +31,23 @@ function RemoveFriendPrompt() {
           />
           <button
             onClick={async () => {
-
-              console.log(JSON.stringify({myUser: id}))
+      
 
               let post = await fetch(
-                'http://localhost:8080/delete-user/'+delUser,
+                "http://localhost:8080/delete-user/" + delUser,
                 {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: user.id 
+                  body: user.id
                 }
               );
 
               let data = await post.json();
-             if(data.response === "User deleted") {window.location.reload();}
-             else {alert(data.response)}
-
+              if (data.response === "User deleted") {
+                window.location.reload();
+              } else {
+                alert(data.response);
+              }
             }}
             style={{
               margin: "0 10px 0 10px"

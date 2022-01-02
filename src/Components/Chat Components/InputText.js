@@ -9,25 +9,49 @@ time = time.toLocaleString("en-US", {
   hour12: true
 });
 
-function InputText({ messageData, setMessageData }) {
+function InputText({ messageData, setMessageData,setMyFriend,myFriend }) {
   // const [content , setContent] = useState("");
-  const { messages, friendID, connection, user } = useContext(DataContext);
+  const {
+    messages,
+    currentFriend,
+    setCurrentFriend,
+    connection,
+    user,
+    friends,
+    setFriends
+  } = useContext(DataContext);
 
-  const [date, setDate] = useState(new Date());
   const [content, setContent] = useState("");
   const [id, setId] = useState(user.id);
 
   React.useEffect(() => {
     if (connection != null) {
       connection.onmessage = (evt) => {
-        const data = JSON.parse(evt.data);
-        console.log(data);
-        setMessageData((messageData) => [...messageData, data]);
+        let message = JSON.parse(evt.data);
+
+        let myFriendTest01 = currentFriend
+
+        myFriendTest01.messages.push(message);
+
+        setMyFriend({...myFriend, messages: myFriendTest01.messages});
+
+
+ 
+
+        console.log(message);
       };
     }
 
     setId(user.id);
-  }, [id, connection, friendID, content, setContent, user]);
+  }, [
+    id,
+    connection,
+    user,
+    friends,
+    setFriends,
+    setCurrentFriend,
+    currentFriend
+  ]);
 
   return (
     <div className="chat-message clearfix">
@@ -47,17 +71,23 @@ function InputText({ messageData, setMessageData }) {
           placeholder="Enter text here..."
           onKeyPress={(e) => {
             //get key code of enter
-            let newMSG = new Message("001", content, id, time, friendID);
+            let newMSG = new Message(
+              "001",
+              content,
+              id,
+              time,
+              currentFriend.id
+            );
             newMSG.date = time;
             newMSG.content = e.target.value;
-            newMSG.userToID = friendID;
+            newMSG.userToID = currentFriend.id;
             newMSG.MyUserID = id;
 
             if (e.key === "Enter") {
               setMessageData((myMessages) => [...messageData, newMSG]);
               connection.send("request-send " + JSON.stringify(newMSG));
 
-              console.log(newMSG, "newMSG");
+
 
               e.target.value = "";
               setContent("");

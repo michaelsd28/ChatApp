@@ -29,7 +29,6 @@ function LoginPage() {
               );
               let response = await data.json();
 
-              console.log(username, password, response);
 
               if (response.response === "invalid username or password") {
                 alert("invalid username or password");

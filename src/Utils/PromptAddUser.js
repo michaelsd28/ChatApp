@@ -109,7 +109,7 @@ function PromptAddUser({ setVisibility, visibility }) {
 
               if (data.response === "Friend added") window.location.reload();
 
-              console.log(data);
+
 
               setVisibility(!visibility);
             }}

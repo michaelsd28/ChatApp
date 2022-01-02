@@ -112,7 +112,7 @@ function RegisterUser({setLogin}) {
                             reader.readAsDataURL(e.target.files[0]);
                             reader.onloadend = () => {
                               user.avatar = reader.result;
-                              console.log(user.avatar);
+                   
                             };
                           }}
                           id="registerFile"
