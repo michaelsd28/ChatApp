@@ -28,7 +28,7 @@ export const DataProvider = ({ children }) => {
 
 
 
-  }, [setCurrentFriend,currentFriend]);
+  }, []);
 
   window.onbeforeunload = function () {
     connection.send("disconnect-client " + user.id);

@@ -29,38 +29,6 @@ function ChatApp() {
 
   return (
     <div>
-      <button
-        className="btn btn-danger"
-        onClick={() => {
-          let msg = {
-            date: "Jan 1, 2022, 8:32:40 PM",
-            id: "001",
-            userToID: "018",
-            content: "hi",
-            MyUserID: "028"
-          };
-
-          // let myFriendTest01 = currentFriend
-
-          // myFriendTest01.messages.push(msg);
-
-          // setMyFriend({...myFriend, messages: myFriendTest01.messages});
-
-          console.log(myFriend);
-          console.log(currentFriend);
-        }}
-      >
-        add message
-      </button>
-      <button
-        onClick={() => {
-          console.log(myFriend.messages, "my friend");
-          console.log(currentFriend.messages, "current friend");
-        }}
-        className="btn btn-warning"
-      >
-        get messages
-      </button>
       <div
         style={{
           position: "relative",
@@ -79,9 +47,16 @@ function ChatApp() {
                     user.friends.map((friend, index) => {
                       return (
                         <div
-                          onClick={() => {
-                            setCurrentFriend(friend);
-                            setMyFriend(friend);
+                          onClick={async () => {
+                            let token = localStorage.getItem("jwt");
+
+                            let request = await fetch(
+                              `http://localhost:8080/get-messages/${token}/${user.id}/${friend.id}`
+                            );
+                            let response = await request.json();
+
+                            setMyFriend(response);
+                            setCurrentFriend(response);
                           }}
                         >
                           <ProfileCard userFriend={friend} />
@@ -101,16 +76,11 @@ function ChatApp() {
                   <ul className="m-b-0  chat-box">
                     {myFriend.messages &&
                       myFriend.messages.map((message) => {
-
-                        if(message.userToID === user.id){
+                        if (message.userToID === user.id) {
                           return <FriendMessageBox message={message} />;
-                        } else{
+                        } else {
                           return <MessageBox message={message} />;
-                      
                         }
-
-                   
-
                       })}
 
                     {/* {currentFriend.messages && currentFriend.messages.map((message) => {

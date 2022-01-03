@@ -33,16 +33,14 @@ function InputText({
   React.useEffect(() => {
     if (connection != null) {
       connection.onmessage = (evt) => {
-
         let message = JSON.parse(evt.data);
 
         if (currentFriend.id === message.MyUserID) {
           let myFriendTest01 = currentFriend;
           myFriendTest01.messages.push(message);
           setMyFriend({ ...myFriend, messages: myFriendTest01.messages });
+          
         }
-
-
       };
     }
 
@@ -88,17 +86,9 @@ function InputText({
             newMSG.MyUserID = id;
 
             if (e.key === "Enter") {
-
-
-  
-
-          
-                let myFriendTest01 = currentFriend;
-                myFriendTest01.messages.push(newMSG);
-                setMyFriend({ ...myFriend, messages: myFriendTest01.messages });
-              
-
-
+              let myFriendTest01 = currentFriend;
+              myFriendTest01.messages.push(newMSG);
+              setMyFriend({ ...myFriend, messages: myFriendTest01.messages });
 
               connection.send("request-send " + JSON.stringify(newMSG));
               e.target.value = "";
