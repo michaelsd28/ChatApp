@@ -170,6 +170,31 @@ fun Application.configureRouting() {
 
         }
 
+
+        get("get-messages/{token}/{userID}/{friendID}") {
+
+
+            try {
+
+                val userID: String? = call.parameters["userID"]
+                val friendID: String? = call.parameters["friendID"]
+                val tokenID = userID?.let { it1 -> JWTService.validateToken(it1) }
+
+                val userDB:User = Gson().fromJson(redisDB.connect().get(userID), User::class.java)
+                val friendDB:FriendUser? = userDB.friends.find { it.id == friendID }
+
+
+
+                call.respond(Gson().toJson(friendDB))
+
+            } catch (e: Exception) {
+                println("error")
+                call.respond(Response("Error getting messages"))
+            }
+
+
+        }
+
     }
 
 

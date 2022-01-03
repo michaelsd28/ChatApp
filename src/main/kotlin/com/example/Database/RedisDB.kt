@@ -16,23 +16,31 @@ class RedisDB {
         return jedis
     }
 
-    fun receiveMessage (message: Message){
+    fun receiveMessage(message: Message) {
 
         try {
-            val sender:User =  Gson().fromJson(connect().get(message.MyUserID),User::class.java)
-            val receiver:User =  Gson().fromJson(connect().get(message.userToID),User::class.java)
+            val sender: User = Gson().fromJson(connect().get(message.MyUserID), User::class.java)
+            val receiver: User = Gson().fromJson(connect().get(message.userToID), User::class.java)
 
-            sender.friends[0].messages= sender.friends[0].messages.plus(message)
-            receiver.friends[0].messages= receiver.friends[0].messages.plus(message)
+            sender.friends.forEach() {
+                if (it.id == message.userToID) {
+                    it.messages = it.messages.plus(message)
+                }
+            }
+            receiver.friends.forEach() {
+                if (it.id == message.MyUserID) {
+                    it.messages = it.messages.plus(message)
+                }
+            }
 
-            connect().set(sender.id,Gson().toJson(sender))
-            connect().set(receiver.id,Gson().toJson(receiver))
+
+            connect().set(sender.id, Gson().toJson(sender))
+            connect().set(receiver.id, Gson().toJson(receiver))
             println("messages updated in DB")
 
-        } catch (e:Exception){
+        } catch (e: Exception) {
             println("an error occurred receiving Message")
         }
-
 
 
     }
@@ -127,6 +135,8 @@ fun main() {
     val ambarString = Gson().toJson(ambar)
 //    println(michaelString)
 //    println(ambarString)
-    db.connect().del("288")
-    println(db.connect().get("288"))
+
+    val michaelDB = Gson().fromJson(michaelString, User::class.java)
+
+    println(michaelDB)
 }

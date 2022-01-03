@@ -90,17 +90,18 @@ fun Application.configureSockets() {
                         println("received: $text")
 
                         if (text.contains("id-Client")) {
-                            WService.connectUser(sessionsUser, text,this)
+                            WService.connectUser(sessionsUser, text, this)
                         }
 
                         if (text.contains("request-send")) {
-                         WService.sendMessage(sessionsUser, text)
+                            val messageText = text .replace("request-send", "")
+                            WService.sendMessage(sessionsUser, text)
+                            redisDB.receiveMessage(Gson().fromJson(messageText, Message::class.java))
                         }
 
                         if (text.contains("disconnect")) {
                             WService.removeUser(sessionsUser, text.split(" ")[1])
                         }
-
 
 
                     }
