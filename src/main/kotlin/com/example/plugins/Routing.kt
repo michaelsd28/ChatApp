@@ -41,10 +41,16 @@ fun Application.configureRouting() {
 
     routing {
 
-        static("/static") {
-            resources("static")
-            default("index.html")
-        }
+
+
+       static {
+
+
+
+           static("/static") {
+               resources("static")
+           }
+       }
 
         get("/") {
 
