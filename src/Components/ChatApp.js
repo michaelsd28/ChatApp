@@ -3,15 +3,13 @@ import "../Css/chat.css";
 import FriendMessageBox from "./Message/FriendMessageBox";
 import MessageBox from "./Message/MessageBox";
 import ProfileCard from "./Profile/ProfileCard";
-import $ from "jquery";
+import $, { data } from "jquery";
 import TopProfileCard from "./Profile/TopProfileCard";
 import TopButtons from "./Chat Components/TopButtons";
 import InputText from "./Chat Components/InputText";
 import SearchChat from "./Chat Components/SearchChat";
 import { DataContext } from "./GenetalContext";
-import { Message } from "../Classes/Messsage";
 import AddFriend from "./Chat Components/AddFriend";
-//laptop changes
 
 function ChatApp() {
   const { user, id, setId, currentFriend, setCurrentFriend } =
@@ -23,7 +21,6 @@ function ChatApp() {
 
   React.useEffect(() => {
     // scroll to buttton
-
     $(".chat-history").animate({ scrollTop: 10000 }, "slow");
   }, [id, setId, myFriend, setMyFriend]);
 
@@ -82,24 +79,6 @@ function ChatApp() {
                           return <MessageBox message={message} />;
                         }
                       })}
-
-                    {/* {currentFriend.messages && currentFriend.messages.map((message) => {
-                      return (
-                        <div
-                          onClick={() => {
-                            
-                            alert(message.content);
-                   
-                          }}
-                        >
-                          {message.MyUserID === user.id ? (
-                            <MessageBox message={message} />
-                          ) : (
-                            <FriendMessageBox message={message} />
-                          )}
-                        </div>
-                      );
-                    })} */}
                   </ul>
                 </div>
 

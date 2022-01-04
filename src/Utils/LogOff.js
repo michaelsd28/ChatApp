@@ -1,4 +1,12 @@
 import React from "react";
+import ToBase64 from "../Utils/UserFull";
+
+
+
+
+
+
+
 
 function LogOff() {
   return (
@@ -15,7 +23,8 @@ function LogOff() {
             width: "25px",
             padding: "5px"
           }}
-          src={process.env.PUBLIC_URL + "/images/logoff.png"}
+          src={"/images/logoff.png"}
+          
         />
         Log Off
       </button>

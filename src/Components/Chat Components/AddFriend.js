@@ -1,20 +1,12 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import $ from "jquery";
 import PromptAddUser from "../../Utils/PromptAddUser";
 import { adduserBTN } from "../../Classes/Functions";
 import { DataContext } from "../GenetalContext";
+import ToBase64 from "../../Utils/UserFull";
 
 function AddFriend() {
-
   const [addUserPrompt, setAddUserPrompt] = React.useState(false);
-
-
-  // val id: String,
-  // val name: String,
-  // val userName: String,
-  // var messages: List<Message>,
-  // val avatar: String,
-
 
 
 
@@ -38,7 +30,7 @@ function AddFriend() {
             style={{
               height: 28
             }}
-            src="/images/add-button.png"
+            src={"/images/add-button.png"}
           />
         </button>
         <label
