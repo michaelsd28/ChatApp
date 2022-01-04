@@ -4,7 +4,6 @@ import { DataContext } from "../Components/GenetalContext";
 function RemoveFriendPrompt() {
   const { user } = useContext(DataContext);
 
-  const [id, setId] = React.useState(user.id);
   const [delUser, setDelUser] = React.useState(null);
 
   return (
@@ -31,8 +30,6 @@ function RemoveFriendPrompt() {
           />
           <button
             onClick={async () => {
-      
-
               let post = await fetch(
                 "http://localhost:8080/delete-user/" + delUser,
                 {
@@ -50,7 +47,8 @@ function RemoveFriendPrompt() {
               }
             }}
             style={{
-              margin: "0 10px 0 10px"
+              margin: "0 10px 0 10px",
+              zIndex: "1"
             }}
             className="btn btn-danger"
           >

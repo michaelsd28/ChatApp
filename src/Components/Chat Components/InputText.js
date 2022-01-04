@@ -69,8 +69,11 @@ function InputText({
         </div>
         <input
           type="text"
+
           className="form-control"
           placeholder="Enter text here..."
+         disabled={!currentFriend.id}
+          
           onKeyPress={(e) => {
             //get key code of enter
             let newMSG = new Message(
@@ -85,11 +88,13 @@ function InputText({
             newMSG.userToID = currentFriend.id;
             newMSG.MyUserID = id;
 
+    
+
             if (e.key === "Enter") {
+      
               let myFriendTest01 = currentFriend;
               myFriendTest01.messages.push(newMSG);
               setMyFriend({ ...myFriend, messages: myFriendTest01.messages });
-
               connection.send("request-send " + JSON.stringify(newMSG));
               e.target.value = "";
               setContent("");
