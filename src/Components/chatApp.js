@@ -13,9 +13,11 @@ import { Message } from "../Classes/Messsage";
 import AddFriend from "./Chat Components/AddFriend";
 //laptop changes
 
-
 function ChatApp() {
-  const { user, id, setId, friendID, setFriendID } = useContext(DataContext);
+  const { user, id, setId, currentFriend, setCurrentFriend } =
+    useContext(DataContext);
+
+  const [myFriend, setMyFriend] = React.useState(currentFriend);
 
   const [messages, setMessages] = React.useState([]);
 
@@ -23,11 +25,10 @@ function ChatApp() {
     // scroll to buttton
 
     $(".chat-history").animate({ scrollTop: 10000 }, "slow");
-  }, [id, setId]);
+  }, [id, setId, myFriend, setMyFriend]);
 
   return (
     <div>
-
       <div
         style={{
           position: "relative",
@@ -40,15 +41,22 @@ function ChatApp() {
             <div className="card chat-app  chat-container">
               <div id="plist" className="people-list">
                 <SearchChat />
-                <AddFriend/>
+                <AddFriend />
                 <ul className="list-unstyled chat-list mt-2 mb-0">
                   {user.friends &&
-                    user.friends.map((friend) => {
+                    user.friends.map((friend, index) => {
                       return (
                         <div
-                          onClick={() => {
-                            setMessages(friend.messages);
-                            setFriendID(friend.id);
+                          onClick={async () => {
+                            let token = localStorage.getItem("jwt");
+
+                            let request = await fetch(
+                              `http://localhost:8080/get-messages/${token}/${user.id}/${friend.id}`
+                            );
+                            let response = await request.json();
+
+                            setMyFriend(response);
+                            setCurrentFriend(response);
                           }}
                         >
                           <ProfileCard userFriend={friend} />
@@ -66,11 +74,22 @@ function ChatApp() {
                 </div>
                 <div className="chat-history">
                   <ul className="m-b-0  chat-box">
-                    {messages.map((message) => {
+                    {myFriend.messages &&
+                      myFriend.messages.map((message) => {
+                        if (message.userToID === user.id) {
+                          return <FriendMessageBox message={message} />;
+                        } else {
+                          return <MessageBox message={message} />;
+                        }
+                      })}
+
+                    {/* {currentFriend.messages && currentFriend.messages.map((message) => {
                       return (
                         <div
                           onClick={() => {
-                            setFriendID(message.userToID);
+                            
+                            alert(message.content);
+                   
                           }}
                         >
                           {message.MyUserID === user.id ? (
@@ -80,13 +99,15 @@ function ChatApp() {
                           )}
                         </div>
                       );
-                    })}
+                    })} */}
                   </ul>
                 </div>
 
                 <InputText
                   setMessageData={setMessages}
                   messageData={messages}
+                  setMyFriend={setMyFriend}
+                  myFriend={myFriend}
                 />
               </div>
             </div>
