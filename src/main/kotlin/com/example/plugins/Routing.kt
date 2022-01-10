@@ -42,15 +42,16 @@ fun Application.configureRouting() {
     routing {
 
 
+        static {
 
-       static {
+            static("/static") {
+                resources("static")
+            }
 
-
-
-           static("/static") {
-               resources("static")
-           }
-       }
+            static("/images") {
+                resources("images")
+            }
+        }
 
         get("/") {
 
@@ -186,8 +187,8 @@ fun Application.configureRouting() {
                 val friendID: String? = call.parameters["friendID"]
                 val tokenID = userID?.let { it1 -> JWTService.validateToken(it1) }
 
-                val userDB:User = Gson().fromJson(redisDB.connect().get(userID), User::class.java)
-                val friendDB:FriendUser? = userDB.friends.find { it.id == friendID }
+                val userDB: User = Gson().fromJson(redisDB.connect().get(userID), User::class.java)
+                val friendDB: FriendUser? = userDB.friends.find { it.id == friendID }
 
 
 
