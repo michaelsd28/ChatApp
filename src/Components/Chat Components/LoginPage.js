@@ -25,7 +25,7 @@ function LoginPage() {
               let password = $("#password").val();
 
               let data = await fetch(
-                "http://localhost:8080/signin/" + username + "/" + password
+                "https://sleepy-woodland-84771.herokuapp.com/signin/" + username + "/" + password
               );
               let response = await data.json();
 

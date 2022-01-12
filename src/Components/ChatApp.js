@@ -48,7 +48,7 @@ function ChatApp() {
                             let token = localStorage.getItem("jwt");
 
                             let request = await fetch(
-                              `http://localhost:8080/get-messages/${token}/${user.id}/${friend.id}`
+                              `https://sleepy-woodland-84771.herokuapp.com/get-messages/${token}/${user.id}/${friend.id}`
                             );
                             let response = await request.json();
 

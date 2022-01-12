@@ -165,7 +165,7 @@ function RegisterUser({setLogin}) {
                         onClick={async () => {
                           if (user.password === password2) {
                             let post = await fetch(
-                              "http://localhost:8080/register",
+                              "https://sleepy-woodland-84771.herokuapp.com/register",
                               {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },

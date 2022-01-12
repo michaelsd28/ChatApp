@@ -97,7 +97,7 @@ function PromptAddUser({ setVisibility, visibility }) {
           <button
             onClick={async () => {
               let post = await fetch(
-                `http://localhost:8080/add-friend/${myUser.id}`,
+                `https://sleepy-woodland-84771.herokuapp.com/add-friend/${myUser.id}`,
                 {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },

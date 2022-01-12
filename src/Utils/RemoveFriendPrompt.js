@@ -31,7 +31,7 @@ function RemoveFriendPrompt() {
           <button
             onClick={async () => {
               let post = await fetch(
-                "http://localhost:8080/delete-user/" + delUser,
+                "https://sleepy-woodland-84771.herokuapp.com/delete-user/" + delUser,
                 {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
