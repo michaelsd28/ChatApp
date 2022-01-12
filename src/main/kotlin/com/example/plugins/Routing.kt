@@ -1,6 +1,7 @@
 package com.example.plugins
 
 import com.example.Database.RedisDB
+import com.example.Play
 import com.example.models.FriendUser
 import com.example.models.Response
 import com.example.models.User
@@ -15,7 +16,9 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.webjars.*
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
 import java.time.ZoneId
 
 
@@ -44,22 +47,43 @@ fun Application.configureRouting() {
 
         static {
 
+
+
+
             static("/static") {
                 resources("static")
             }
 
+
             static("/images") {
                 resources("images")
             }
+
+
+
+
         }
 
         get("/") {
 
-            //respond html with a body
-            val file =
-                File("C:\\Users\\rd28\\Documents\\Coding\\IdeaProjects\\Kotlin\\chat-app\\src\\main\\resources\\index.html")
-            call.respondText(file.readText(), ContentType.Text.Html)
+            //respond html file
+
+            try {
+                Routing::class.java.getResourceAsStream("/index.html").use { `in` ->
+                    BufferedReader(InputStreamReader(`in`)).use { reader ->
+                        call.respondText(reader.readText(), ContentType.Text.Html)
+                    }
+                }
+            } catch (e: Exception) {
+               println("${e.message} could not load html file")
+
+                call.respond(Response("error finding html file"))
+
+            }
+
         }
+
+
 
 
         get("/user/{jwt?}") {
