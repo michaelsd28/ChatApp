@@ -54,10 +54,12 @@ fun Application.configureRouting() {
                 resources("static")
             }
 
-
+            ///static images
             static("/images") {
                 resources("images")
             }
+
+
 
 
 

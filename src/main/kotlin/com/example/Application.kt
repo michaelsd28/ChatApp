@@ -10,16 +10,16 @@ import java.awt.Desktop
 fun main() {
 
 //heroku config
-        embeddedServer(Netty, port = System.getenv("PORT").toInt()) {
-//    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
+//        embeddedServer(Netty, port = System.getenv("PORT").toInt()) {
+    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
 
         configureRouting()
         configureSerialization()
         configureSockets()
 
-//        Desktop.getDesktop().browse(java.net.URI("http://localhost:8080/"))
+        Desktop.getDesktop().browse(java.net.URI("http://localhost:8080/"))
 
-        Runtime.getRuntime().exec("redis-server")
+//        Runtime.getRuntime().exec("wsl Ubuntu-20.04-copy redis-server")
 
     }.start(wait = true)
 }
