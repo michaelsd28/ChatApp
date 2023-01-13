@@ -6,6 +6,8 @@
               xmlns:components="clr-namespace:Chat_app.Views.Components.Dashboard"
 
 Shell.NavBarIsVisible="false"
+           Background="#111827"
+             BackgroundColor="#111827"
     
              >
     <Grid>
@@ -15,8 +17,8 @@ Shell.NavBarIsVisible="false"
         </Grid.RowDefinitions>
 
 
-        <Grid Grid.Row="0" Background="Gray">
-            <Label  Text="Chat app" />
+        <Grid Grid.Row="0" Background="#1f2937" >
+            <Label  Text="Chat app" TextColor="White" />
         </Grid>
         <ScrollView Grid.Row="1" >
         <StackLayout >

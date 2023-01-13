@@ -22,8 +22,8 @@
             </Frame>
      
             <StackLayout Orientation="Vertical" HorizontalOptions="Center"  VerticalOptions="Center">
-                <Label Text="Name"  />
-                <Label Text="Last message"/>
+                <Label Text="Name"  TextColor="White" />
+                <Label Text="Last message" TextColor="White"/>
             </StackLayout>
       
 

@@ -11,11 +11,19 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 
-        Routing.RegisterRoute(nameof(Dashboard) , typeof(Dashboard));
+
+        Routing.RegisterRoute(nameof(MainChat), typeof(MainChat));
+        Routing.RegisterRoute(nameof(Dashboard), typeof(Dashboard));
         _ = Shell.Current.GoToAsync(nameof(Dashboard));
 
 
+ 
+     
+        
+
     }
+
+
 
 
 

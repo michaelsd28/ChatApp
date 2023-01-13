@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Chat_app.Views.Pages;
 
 public partial class Dashboard : ContentPage
@@ -6,5 +8,8 @@ public partial class Dashboard : ContentPage
 	{
 		InitializeComponent();
 
+ 
+
+ 
     }
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Chat_app.Views.Components.ChatScreen.Chat_bubble"
+                 x:Name="Bubble_root"
+             
+             >
+
+
+    <Frame x:Name="Bubble_frame"  CornerRadius="10" WidthRequest="280" Padding="15" Margin="10" BorderColor="Transparent" >
+
+        <Label  x:Name="chat_bubble_text" FontFamily="Roboto"  FontSize="Medium"  TextColor="White" />
+    </Frame>
+
+</ContentView>

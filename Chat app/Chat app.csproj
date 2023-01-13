@@ -50,8 +50,11 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\add_button.png" />
+	  <None Remove="Resources\Images\emoji_alien.png" />
 	  <None Remove="Resources\Images\lock_logo.png" />
+	  <None Remove="Resources\Images\photo_pastel.png" />
 	  <None Remove="Resources\Images\profile_photo.png" />
+	  <None Remove="Resources\Images\send_icon.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -60,12 +63,17 @@
 	  <Folder Include="Resources\Images\MainPage\" />
 	  <Folder Include="ViewModel\" />
 	  <Folder Include="Services\" />
-	  <Folder Include="Views\Components\ChatScreen\" />
 	  <Folder Include="Views\Components\AuthenticationScreen\" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\Components\ChatScreen\Chat_bubble.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Components\Dashboard\UserCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Add friend.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\Auth_page.xaml">
@@ -78,6 +86,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\Register page.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Sign up.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

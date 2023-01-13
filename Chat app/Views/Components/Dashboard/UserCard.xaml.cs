@@ -13,7 +13,8 @@ public partial class UserCard : ContentView
 
     private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
     {
-        Routing.RegisterRoute(nameof(MainChat), typeof(MainChat));
+
         _ = Shell.Current.GoToAsync(nameof(MainChat));
+    
     }
 }

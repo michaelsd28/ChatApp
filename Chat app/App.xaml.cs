@@ -1,21 +1,21 @@
-﻿namespace Chat_app;
+﻿
+
+
+
+
+namespace Chat_app;
 
 
 
 public partial class App : Application
 {
-
-
     public App()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 
-
-
+ 
         MainPage = new AppShell();
-
         
-        }
-
     }
+}
 
