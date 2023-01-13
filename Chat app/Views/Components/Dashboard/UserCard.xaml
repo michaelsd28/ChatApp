@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Chat_app.Views.Components.Dashboard.UserCard"
+             x:Name="UserCard_root"
+             
+             >
+
+
+    <Grid>
+
+
+
+
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+        </Grid.GestureRecognizers>
+    
+        <StackLayout Orientation="Horizontal"  HorizontalOptions="Start"  VerticalOptions="Start" Spacing="10" Margin="10"  >
+            <Frame CornerRadius="100" Background="Red" BorderColor="Red" Padding="-10" Margin="0">
+                <Image  Source="profile_photo.png"/>
+            </Frame>
+     
+            <StackLayout Orientation="Vertical" HorizontalOptions="Center"  VerticalOptions="Center">
+                <Label Text="Name"  />
+                <Label Text="Last message"/>
+            </StackLayout>
+      
+
+
+        </StackLayout>
+
+
+
+
+
+    </Grid>
+
+</ContentView>

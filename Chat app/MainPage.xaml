@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Chat_app.MainPage"
+             x:Name="MainContent_page"
+             Title=""
+
+   
+  
+             >
+
+
+    <Grid >
+        <Grid.RowDefinitions >
+            <RowDefinition   Height="280"/>
+            <RowDefinition  Height="1*"/>
+
+        </Grid.RowDefinitions>
+        
+        <!--#region logo and text-->
+        <Grid Grid.Row="0" Padding="20">
+            <VerticalStackLayout Spacing="10">
+                <Image Source="dotnet_bot.svg"/>
+                <Label Text="Chat app" FontSize="28" HorizontalTextAlignment="Center"/>
+            </VerticalStackLayout>
+   
+        </Grid>
+
+
+
+        <!--#endregion-->
+
+
+        <VerticalStackLayout Grid.Row="1" HorizontalOptions="FillAndExpand" Padding="25" Margin="10">
+
+
+
+            <StackLayout Orientation="Vertical" Spacing="20" HorizontalOptions="FillAndExpand">
+
+            <Frame  BackgroundColor="Transparent" BorderColor="#3f3f3f" HorizontalOptions="FillAndExpand" CornerRadius="20" HeightRequest="60" Padding="5">
+                    <StackLayout  Orientation="Horizontal" Spacing="10" VerticalOptions="Center">
+                        <Image Margin="5"  Source="user_logo.png" MaximumHeightRequest="30"/>
+
+
+                        <Entry  Placeholder="Username"   FontSize="18" HorizontalOptions="FillAndExpand"  />
+                </StackLayout>
+            </Frame>
+
+                <Frame BackgroundColor="Transparent" BorderColor="#3f3f3f" HorizontalOptions="FillAndExpand" CornerRadius="20" HeightRequest="60" Padding="5">
+                    <StackLayout    Orientation="Horizontal" Spacing="10" VerticalOptions="Center">
+                        <Image Margin="5"  Source="lock_logo.png" MaximumHeightRequest="30"/>
+
+
+                        <Entry  Placeholder="Passoword"   FontSize="18" HorizontalOptions="FillAndExpand"/>
+                    </StackLayout>
+                </Frame>
+                <StackLayout Orientation="Vertical" >
+                    <Button Text="Login"  Clicked="Button_login" BackgroundColor="#3f3f3f" TextColor="White" CornerRadius="20" HeightRequest="60" FontSize="18" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
+            
+                    <Button Text="Sign up" Background="Transparent" TextColor="Wheat"/>
+                </StackLayout>
+
+            </StackLayout>
+
+
+        </VerticalStackLayout>
+ 
+
+   
+
+    </Grid>
+
+
+
+
+
+
+
+</ContentPage>

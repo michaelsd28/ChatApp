@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Chat_app.Views.Pages.Dashboard"
+                x:Name="Dashboard_ContentPage"
+              xmlns:components="clr-namespace:Chat_app.Views.Components.Dashboard"
+
+Shell.NavBarIsVisible="false"
+    
+             >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+
+        <Grid Grid.Row="0" Background="Gray">
+            <Label  Text="Chat app" />
+        </Grid>
+        <ScrollView Grid.Row="1" >
+        <StackLayout >
+            <components:UserCard   />
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+            <components:UserCard/>
+
+            </StackLayout>
+
+
+        </ScrollView>
+        
+        <Grid Grid.Row="1" >
+            <AbsoluteLayout VerticalOptions="End" HorizontalOptions="End"  Margin="0,0,20,0">
+                <ImageButton  WidthRequest="50" Source="add_button.png"/>
+            </AbsoluteLayout>
+        </Grid>
+
+
+
+    </Grid>
+</ContentPage>
