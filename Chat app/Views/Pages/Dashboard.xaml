@@ -52,7 +52,7 @@ Shell.NavBarIsVisible="false"
 
 
         </ScrollView>
-        
+    
         <Grid Grid.Row="1" >
             <AbsoluteLayout VerticalOptions="End" HorizontalOptions="End"  Margin="0,0,20,0">
                 <ImageButton  WidthRequest="50" Source="add_button.png"/>
