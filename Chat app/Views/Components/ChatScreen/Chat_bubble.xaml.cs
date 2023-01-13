@@ -38,7 +38,6 @@ public partial class Chat_bubble : ContentView
 
 
 
-
     // now with horizontal alignment the type is string
     public static readonly BindableProperty HorizontalAlignmentProperty = BindableProperty.Create(nameof(Bubble_horizontal_alignment), typeof(string), typeof(Chat_bubble), string.Empty, BindingMode.TwoWay, propertyChanged: OnHorizontalAlignmentPropertyChanged);
 
