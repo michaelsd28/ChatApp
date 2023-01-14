@@ -95,6 +95,116 @@ class Login_widget extends StatelessWidget {
                         child: const Text('Login'),
                       ),
                     ),
+                    // or login with google button or github button or facebook button or sign up button
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Or login with',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              // google button
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.white,
+                                    minimumSize: Size(50, 50),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: const Text(
+                                    'G',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // github button
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.white,
+                                    minimumSize: Size(50, 50),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: const Text(
+                                    'G',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // facebook button
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  minimumSize: Size(50, 50),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                onPressed: () {},
+                                child: const Text(
+                                  'F',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    // sign up button
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Don\'t have an account?',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // add code to navigate to the next screen (sign up)
+                              var route = MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const Sign_up(),
+                              );
+                              Navigator.of(context).push(route);
+                            },
+                            child: const Text(
+                              'Sign up',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // i love github copilot - thank you microsoft for this amazing tool
+
                   ],
                 ),
               ),
