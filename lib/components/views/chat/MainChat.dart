@@ -1,11 +1,70 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class MainChat extends StatelessWidget {
+
+void Scroll_to_bottom( ScrollController scrollController) {
+  scrollController.animateTo(
+    scrollController.position.maxScrollExtent,
+    duration: const Duration(milliseconds: 300),
+    curve: Curves.easeOut,
+  );
+}
+
+
+
+class MainChat extends StatefulWidget {
   const MainChat({Key? key}) : super(key: key);
 
   @override
+  State<MainChat> createState() => _MainChatState();
+
+}
+
+class _MainChatState extends State<MainChat> {
+
+  final ScrollController scrollController = ScrollController(   keepScrollOffset: true,);
+
+  @override
+  void initState() {
+    //scroll to bottom when chat is opened
+
+
+    super.initState();
+
+    //declare scroll controller to scroll to bottom of the list
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      //write or call your logic
+      //code will run when widget rendering complete
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    });
+
+    print("initState called in MainChat");
+
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+
+
+    scrollController.addListener(() {
+      // scroll to bottom when new message is added to the list and when chat is opened
+      if (scrollController.position.maxScrollExtent == scrollController.offset) {
+         Scroll_to_bottom(scrollController);
+      }
+
+      print("scrollController called in MainChat ${scrollController.offset}");
+    });
+
+
+
+
+
+
+
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Chat'),
@@ -22,6 +81,7 @@ class MainChat extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView.builder(
+                  controller: scrollController,
                   itemCount: 20,
                   itemBuilder: (context, index) {
 
@@ -40,11 +100,11 @@ class MainChat extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: index % 2 == 0 ?  Colors.lightGreenAccent :  Colors.lightBlueAccent,
                                 // border radius for the whole container except bottom right
-                                borderRadius: index % 2 == 0 ? BorderRadius.only(
+                                borderRadius: index % 2 == 0 ? const BorderRadius.only(
                                   bottomRight: Radius.circular(10),
                                   topRight: Radius.circular(10),
                                   bottomLeft: Radius.circular(10),
-                                ) : BorderRadius.only(
+                                ) : const BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   bottomRight: Radius.circular(10),
                                   bottomLeft: Radius.circular(10),
@@ -53,7 +113,10 @@ class MainChat extends StatelessWidget {
                               ),
                             padding: const EdgeInsets.all(10),
 
-                              child: Text('Message needs to be very long .',  style: TextStyle(fontSize: 16),),
+
+                              // add  index to text
+
+                              child:  Text('Message from user very long $index',  style: TextStyle(fontSize: 16),),
                           ),
                         ],
                       ),
@@ -90,8 +153,13 @@ class MainChat extends StatelessWidget {
                         color: const Color(0xFF374151),
                         borderRadius: BorderRadius.circular(40),
                       ),
-                      child: const Icon(
-                        Icons.send,
+                      child:  IconButton(
+                        onPressed: () {
+                          // add message to the list
+                          // scroll to bottom
+                          Scroll_to_bottom(scrollController);
+                        },
+                        icon: const Icon(Icons.send, color: Colors.white,),
                         color: Colors.white,
                       ),
                     ),

@@ -1,4 +1,5 @@
 import 'package:chat_app/components/views/chat/MainChat.dart';
+import 'package:chat_app/components/views/others/Add_friend.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatelessWidget {
@@ -10,14 +11,22 @@ class Dashboard extends StatelessWidget {
 
 
 floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          var route = MaterialPageRoute(
+            builder: (BuildContext context) => const Add_friend(),
+          );
+          Navigator.of(context).push(route);
+        },
         child: Icon(Icons.add),
       ),
 
       appBar: AppBar(
 
+
         title: const Text('Dashboard'),
         backgroundColor: const Color(0xFF374151),
+        // remove the back button
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         color: const Color(0xFF111827),
