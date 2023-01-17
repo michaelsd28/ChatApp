@@ -1,23 +1,23 @@
 import 'package:chat_app/components/views/dashboard/Dashboard.dart';
-import 'package:chat_app/components/views/sign_up/Sign_up.dart';
+import 'package:chat_app/components/views/sign_up/SignUp_widget.dart';
+import 'package:chat_app/model/GlobalStore.dart';
+import 'package:chat_app/model/MongoDB/LoginUser.dart';
 import 'package:chat_app/model/MongoDB/MongoDBService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/MongoDB/FindUser.dart';
+import '../../../model/User.dart';
 
 class Login_widget extends StatelessWidget {
   const Login_widget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     var usernameController = TextEditingController();
     var passwordController = TextEditingController();
 
-
     return Container(
-
       // tailwind color palette dark mode
       // max width 400
 
@@ -47,13 +47,10 @@ class Login_widget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                       Padding(
+                      Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
                         child: TextField(
                           controller: usernameController,
-                          onChanged: (value) {
-                            usernameController.text = value;
-                          },
                           style: const TextStyle(
                             // text color is white and placeholder color is gray
                             color: Colors.white,
@@ -68,11 +65,8 @@ class Login_widget extends StatelessWidget {
                         ),
                       ),
 
-                       TextField(
-                        onChanged: (value) {
-                          passwordController.text = value;
-                        },
-                        controller:  passwordController,
+                      TextField(
+                        controller: passwordController,
                         // padding top
                         style: const TextStyle(
                           color: Colors.white,
@@ -101,35 +95,37 @@ class Login_widget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          onPressed: () {
-
+                          onPressed: () async {
                             var username = usernameController.text;
                             var password = passwordController.text;
+                            User user =
+                                User(username: username, password: password);
 
-                            FindUser findUser = FindUser();
-                            MongoDBService mongoDBService = MongoDBService(findUser);
+                            LoginUser loginUser = LoginUser(user);
+                            MongoDBService mongoDBService =
+                                MongoDBService(loginUser);
+                            await mongoDBService.execute();
+                            GlobalStore store = GlobalStore.getInstance();
 
-                            if (username == 'admin' && password == 'admin') {
+                            String? jwt = store.local_storage.getItem("JWT_token");
+
+                            // print("Login_widget * jwt: $jwt");
+
+                            if (jwt != null) {
                               // add code to navigate to the next screen (sign up)
                               var route = MaterialPageRoute(
-
-
                                 builder: (BuildContext context) =>
-                                const Dashboard(),
+                                    const Dashboard(),
                               );
                               Navigator.of(context).push(route);
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SignUp(),
-                                ),
+                            } else if (jwt == null) {
+                              // add code to navigate to the next screen (sign up)
+                              var route = MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const SignUp_widget(),
                               );
+                              Navigator.of(context).push(route);
                             }
-
-
-
-
                           },
                           child: const Text('Login'),
                         ),
@@ -184,7 +180,6 @@ class Login_widget extends StatelessWidget {
                                       width: 20,
                                       height: 20,
                                     ),
-
                                   ),
                                 ),
                                 // facebook button
@@ -225,7 +220,7 @@ class Login_widget extends StatelessWidget {
                                 // add code to navigate to the next screen (sign up)
                                 var route = MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      const Sign_up(),
+                                      const SignUp_widget(),
                                 );
                                 Navigator.of(context).push(route);
                               },
@@ -241,7 +236,6 @@ class Login_widget extends StatelessWidget {
                       ),
 
                       // i love github copilot - thank you microsoft for this amazing tool
-
                     ],
                   ),
                 ),

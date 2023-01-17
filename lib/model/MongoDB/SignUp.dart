@@ -5,19 +5,19 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:chat_app/model/RegisterUser.dart';
 // import mongodb dart driver
-import 'package:mongo_dart/mongo_dart.dart';
+
 // import to map
 import 'dart:convert';
 
 import 'Operations.dart';
 
 
-class InsertUser implements Operation {
+class SignUp implements Operation {
 
   late RegisterUser user;
 
 
-  InsertUser(this.user);
+  SignUp(this.user);
 
 
 
@@ -38,23 +38,11 @@ class InsertUser implements Operation {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      if (kDebugMode) {
-        print(await response.stream.bytesToString());
-      }
+      print(await response.stream.bytesToString());
     }
     else {
-      if (kDebugMode) {
-        print(response.reasonPhrase);
-      }
+      print(response.reasonPhrase);
     }
-
-
-
-
-
-    print("insert user in localhost:8080/register with post method and json body ${user.toJson()}");
-
-
 
 
 
