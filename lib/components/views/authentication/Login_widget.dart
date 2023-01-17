@@ -96,36 +96,9 @@ class Login_widget extends StatelessWidget {
                             ),
                           ),
                           onPressed: () async {
-                            var username = usernameController.text;
-                            var password = passwordController.text;
-                            User user =
-                                User(username: username, password: password);
-
-                            LoginUser loginUser = LoginUser(user);
-                            MongoDBService mongoDBService =
-                                MongoDBService(loginUser);
-                            await mongoDBService.execute();
-                            GlobalStore store = GlobalStore.getInstance();
-
-                            String? jwt = store.local_storage.getItem("JWT_token");
-
-                            // print("Login_widget * jwt: $jwt");
-
-                            if (jwt != null) {
-                              // add code to navigate to the next screen (sign up)
-                              var route = MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const Dashboard(),
-                              );
-                              Navigator.of(context).push(route);
-                            } else if (jwt == null) {
-                              // add code to navigate to the next screen (sign up)
-                              var route = MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const SignUp_widget(),
-                              );
-                              Navigator.of(context).push(route);
-                            }
+                            String username = usernameController.text;
+                            String password = passwordController.text;
+                            _login(context, username, password);
                           },
                           child: const Text('Login'),
                         ),
@@ -245,5 +218,32 @@ class Login_widget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _login(BuildContext context, String username, String password) async {
+    User user = User(username: username, password: password);
+
+    LoginUser loginUser = LoginUser(user);
+    MongoDBService mongoDBService = MongoDBService(loginUser);
+    await mongoDBService.execute();
+    GlobalStore store = GlobalStore.getInstance();
+
+    String? jwt = store.local_storage.getItem("JWT_token");
+
+    // print("Login_widget * jwt: $jwt");
+
+    if (jwt != null) {
+      // add code to navigate to the next screen (sign up)
+      var route = MaterialPageRoute(
+        builder: (BuildContext context) => const Dashboard(),
+      );
+      Navigator.of(context).push(route);
+    } else if (jwt == null) {
+      // add code to navigate to the next screen (sign up)
+      var route = MaterialPageRoute(
+        builder: (BuildContext context) => const SignUp_widget(),
+      );
+      Navigator.of(context).push(route);
+    }
   }
 }
