@@ -1,20 +1,19 @@
 import 'Message.dart';
 
 class FriendUser {
-  String? id;
   String? name;
-  String? email;
-  String? photoUrl;
-  String? status;
+  String? username;
+  String? image;
   String? lastMessage;
   List<Message>? messages;
 
-  FriendUser(
-      {this.id,
-      this.name,
-      this.email,
-      this.photoUrl,
-      this.status,
-      this.lastMessage,
-      this.messages});
+  FriendUser({
+        this.name,
+        this.username,
+        this.image,
+        this.lastMessage,
+        this.messages
+      });
+
+
 }

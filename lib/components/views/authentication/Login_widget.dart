@@ -5,8 +5,6 @@ import 'package:chat_app/model/MongoDB/LoginUser.dart';
 import 'package:chat_app/model/MongoDB/MongoDBService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../../model/MongoDB/FindUser.dart';
 import '../../../model/User.dart';
 
 class Login_widget extends StatelessWidget {
@@ -239,11 +237,13 @@ class Login_widget extends StatelessWidget {
       );
       Navigator.of(context).push(route);
     } else if (jwt == null) {
-      // add code to navigate to the next screen (sign up)
-      var route = MaterialPageRoute(
-        builder: (BuildContext context) => const SignUp_widget(),
+      // show snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid username or password'),
+        ),
       );
-      Navigator.of(context).push(route);
+
     }
   }
 }
