@@ -1,5 +1,6 @@
-package model
+package model.Request
 
+import model.FriendUser
 import org.bson.Document
 
 class RegisterUser {

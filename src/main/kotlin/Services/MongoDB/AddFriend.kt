@@ -1,73 +1,66 @@
 package Services.MongoDB
 
+import Services.Authentication.JWTServices
 import Services.GlobalStore
 import com.google.gson.Gson
 import model.FriendUser
-import model.User
+import model.Request.Req_add_friend
+import model.User.User
 import org.bson.Document
 
-class AddFriend (val newFriend: FriendUser): Operation {
+class AddFriend(private val newFriend: Req_add_friend) : Operation {
 
     override fun execute(): Boolean {
 
-        // TODO: Add friend to database and return true if successful
-
-        println("AddFriend: $newFriend * method called in AddFriend.kt")
+        try {
 
 
-        val globalStore = GlobalStore.getGlobalStore()
-        val collection = globalStore.GetCollection("Users")
-        val myUsername: String = newFriend.username
-        val myUser =  collection.find(Document("username", myUsername)).first()
+            // database connection
+            val globalStore = GlobalStore.getGlobalStore()
+            val collection = globalStore.GetCollection("Users")
+
+            // get user from token
+            val myUserName = JWTServices.getUsernameFromJWTToken(newFriend.token)
+            val myUser = collection.find(Document("username", myUserName)).first()
+            val myUserObject = Gson().fromJson(myUser.toJson(), User::class.java)
+            val my_user_as_friend = myUserObject.ToFriend()
+
+            // get friend from username
+            val friendUser = collection.find(Document("username", newFriend.username)).first() ?: return false
+            val friendUserObject = Gson().fromJson(friendUser.toJson(), User::class.java)
+            val friend_user_as_friend = friendUserObject.ToFriend()
+
+
+            // validate if friend is already in my friends list
+            val hasFriend = myUserObject.hasFriend(newFriend.username)
+
+            if (hasFriend) {
+                return false
+            }
+
+            if (myUserObject.username == friendUserObject.username) {
+                return false
+            }
+
+            // add friend to my friends list
+            collection.updateOne(myUser, Document("\$push", Document("friends", Gson().toJson(friend_user_as_friend))))
+
+            // add me to friend's friends list
+            collection.updateOne(friendUser, Document("\$push", Document("friends", Gson().toJson(my_user_as_friend))))
 
 
 
-        println("myUser: $myUser")
+            return true
 
-        // convert myUsert to User object
-        val myUserObject = User().fromDocument(myUser)
-        var hasFriend = myUserObject.hasFriend(newFriend)
-
-
-
-        if (hasFriend) {
+        } catch (e: Exception) {
             return false
         }
-
-
-
-        // insert myUserObject to database
-
-        val gson = Gson()
-        val newFriend:FriendUser = FriendUser().toFriendUser(myUser, newFriend.friend_username)
-        val newFriend_string = gson.toJson(newFriend)
-        collection.updateOne(myUser, Document("\$push", Document("friends", newFriend_string)))
-
-
-        // do the same for the friend
-            val friendUsername: String = newFriend.friend_username
-            val myUser_document =  collection.find(Document("username", friendUsername)).first()
-
-            val friendUserObject = FriendUser().toFriendUser(myUser_document, myUsername)
-            val friendUser_string = gson.toJson(friendUserObject)
-
-    collection.updateOne(myUser_document, Document("\$push", Document("friends", friendUser_string)))
-
-
-
-
-
-
-
-
-
-        return true
-
-
 
 
     }
 
 }
+
+
 
 

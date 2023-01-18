@@ -1,10 +1,10 @@
 package routes
 
+import Services.MongoDB.FindFriends
 import Services.MongoDB.MongoDBService
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import model.FindFriends
 import model.FriendUser
 
 
@@ -21,9 +21,6 @@ fun Application.GetFriends() {
                 val getFriends = FindFriends(token!!)
                 var mongoDBService = MongoDBService(getFriends)
                 val friends =  mongoDBService.execute()
-
-
-
 
 
                 call.respond(friends)

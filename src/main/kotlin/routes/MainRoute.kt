@@ -9,6 +9,7 @@ fun Application.MainRoute() {
     Login()
     AddFriend()
     GetFriends()
+    Message()
 
 
 }

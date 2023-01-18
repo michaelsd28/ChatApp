@@ -1,9 +1,8 @@
 package Services.MongoDB
 
 import Services.GlobalStore
-import model.FriendUser
-import model.RegisterUser
-import model.User
+import model.Request.RegisterUser
+import model.User.User
 import org.bson.Document
 
 class InsertUser(private val registerUser: RegisterUser) : Operation {

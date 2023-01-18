@@ -31,6 +31,7 @@ object JWTServices {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
             true
         } catch (e: Exception) {
+            print("validateJWTToken: $e")
             false
         }
 

@@ -1,5 +1,6 @@
 package routes
 
+import Services.Authentication.JWTServices
 import Services.MongoDB.AddFriend
 import Services.MongoDB.InsertUser
 import Services.MongoDB.MongoDBService
@@ -8,6 +9,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import model.FriendUser
+import model.Request.Req_add_friend
 import org.bson.Document
 
 
@@ -18,16 +20,19 @@ fun Application.AddFriend() {
         post("/add-friend") {
 
             // get AddFriend
-            val addFriend = call.receive<FriendUser>()
+            val newFriend = call.receive<Req_add_friend>()
 
-            println("AddFriend: $addFriend")
+           val isToken = JWTServices.validateJWTToken(newFriend.token)
 
-            call.respond(addFriend)
+            print("isToken: $newFriend.token")
+
+            if (!isToken) {
+                call.respond(mapOf("status" to "fail"))
+                return@post
+            }
 
 
-
-
-            val insertUser = AddFriend(addFriend)
+            val insertUser = AddFriend(newFriend)
             val mongoDBService = MongoDBService(insertUser)
             val isRegister = mongoDBService.execute() as Boolean
 
