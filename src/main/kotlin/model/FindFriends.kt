@@ -25,6 +25,7 @@ class FindFriends(private val token: String) : Operation {
 
         val friends = user?.get("friends") as List<String>
 
+
         val friendsList: List<FriendUser> = friends.map { friend ->
             val friendDocument = Document.parse(friend)
             var newFriend = FriendUser()
