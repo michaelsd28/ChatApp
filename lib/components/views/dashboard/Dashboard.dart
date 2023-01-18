@@ -1,5 +1,5 @@
 import 'package:chat_app/components/views/chat/MainChat.dart';
-import 'package:chat_app/components/views/others/Add_friend.dart';
+import 'package:chat_app/components/views/others/AddFriend_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/FriendUser.dart';
@@ -34,8 +34,7 @@ class _DashboardState extends State<Dashboard> {
     List<FriendUser> newList = [];
 
     newList = await  getFriends.GetList();
-    // MongoDBService mongoDBService = MongoDBService(getFriends);
-    // await mongoDBService.execute();
+
     setState(() {
       print("get_friends() -> friends: $friends and newList: $newList");
       friends = newList;
@@ -66,16 +65,21 @@ class _DashboardState extends State<Dashboard> {
       ),
       body: Container(
         color: const Color(0xFF111827),
-        child: ListView(
-            // backgroundColor: const Color(0xFF374151),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            get_friends();
+          },
+          child: ListView(
+              // backgroundColor: const Color(0xFF374151),
 
-            children: friends
-                .map((friend) => UserFriend_widget(
-                      username: friend.username,
-                      lastMessage: "last message",
-                      image: friend.image,
-                    ))
-                .toList()),
+              children: friends
+                  .map((friend) => UserFriend_widget(
+                        username: friend.username,
+                        lastMessage: "last message",
+                        image: friend.image,
+                      ))
+                  .toList()),
+        ),
       ),
     );
   }

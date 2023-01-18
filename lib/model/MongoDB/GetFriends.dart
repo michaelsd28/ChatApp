@@ -32,13 +32,13 @@ class GetFriends implements Operation {
 
     if (response.statusCode == 200) {
       List<dynamic> list = jsonDecode(body);
-      list.forEach((element) {
+      for (var element in list) {
         FriendUser newFriend = FriendUser();
         newFriend.name = element["name"];
-        newFriend.username = element["username"];
+        newFriend.username = element["name"];
         newFriend.image = element["image"];
         friends.add(newFriend);
-      });
+      }
     }
     return friends;
   }
