@@ -84,7 +84,13 @@ class User {
     fun addMessage(messageObject: Message) {
         var friend = friends.find { friend -> friend.username == messageObject.receiver }
 
-        friend?.messages?.plus(messageObject)
+       var messages = friend?.messages?.plus(messageObject)
+
+        friend?.messages = messages as ArrayList<Message>
+
+
+
+
 
     }
 

@@ -47,34 +47,8 @@ fun fromDocument(addfriendDocument: Document): FriendUser {
 
 
 
-    fun toFriendUser(myUser: Document?, newFriend: String): FriendUser {
-
-        name = newFriend
-        username = myUser?.getString("username") ?: ""
-        image = myUser?.getString("image") ?: ""
-        messages = ArrayList<Message>()
-        return this
-
-    }
-
-    fun fromDocument_ListFriend(user: Document?): List<FriendUser> {
-
-        var listFriend:List<FriendUser> = ArrayList()
-        var listFriendString = user?.get("friends")
-        var listFriendStringJson = Gson().fromJson(listFriendString.toString(), Array<FriendUser>::class.java)
-        println("listFriendString: $listFriendString || listFriendString: $listFriendString")
-
-        for (friend in listFriendStringJson) {
-            listFriend += friend
-
-        }
-
-        return listFriend
 
 
-
-
-    }
 
     fun CleanJsonString (json:String):String{
         // original "{\"name\":\"postman_name\",\"username\":\"postman_username\",\"image\":\"https://staticg.sportskeeda.com/editor/2022/11/a402f-16694231050443-1920.jpg\",\"messages\":[]}"
@@ -88,6 +62,8 @@ fun fromDocument(addfriendDocument: Document): FriendUser {
 
 
     }
+
+
 
 
 }

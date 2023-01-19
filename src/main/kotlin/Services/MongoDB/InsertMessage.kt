@@ -2,6 +2,8 @@ package Services.MongoDB
 
 import Services.GlobalStore
 import com.google.gson.Gson
+import com.mongodb.client.model.UpdateOptions
+import io.ktor.util.*
 import model.FriendUser
 import model.Request.Req_insert_message
 import model.User.Message
@@ -17,12 +19,17 @@ class InsertMessage(val req_add_message: Req_insert_message) :Operation {
         val globalStore = GlobalStore.getGlobalStore()
         val collection = globalStore.GetCollection("Users")
 
+
+
+
         var sender = req_add_message.sender
         var receiver = req_add_message.receiver
-        var message = req_add_message.message
-        var type = req_add_message.type
+
         var token = req_add_message.token
         var messageObject: Message = Message().fromRequest(req_add_message)
+
+
+
 
         var isValidToken = Services.Authentication.JWTServices.validateJWTToken(token)
 
@@ -31,28 +38,37 @@ class InsertMessage(val req_add_message: Req_insert_message) :Operation {
         }
 
         var user = collection.find(Document("username", sender)).first()
-        var userObject_list:List<FriendUser> = FriendUser().fromDocument_ListFriend(user)
 
-        var friend = collection.find(Document("username", receiver)).first()
-        val friendObject_list:List<FriendUser> = FriendUser().fromDocument_ListFriend(friend)
 
-      // find sender and receiver
-        var senderObject:FriendUser = userObject_list.find { it.username == receiver }!!
-        var receiverObject:FriendUser = friendObject_list.find { it.username == sender }!!
+        var message_doc = Document.parse(Gson().toJson(messageObject))
+        var updateUser = Document("\$push", Document("friends.\$[elem].messages", message_doc))
+        var updateOptions = UpdateOptions().arrayFilters(listOf(Document("elem.username", receiver)))
+        collection.updateOne(user, updateUser, updateOptions)
 
-        // add message to sender
-        senderObject.messages = senderObject.messages.plus(messageObject)
+
 
         // add message to receiver
-        receiverObject.messages = receiverObject.messages.plus(messageObject)
+        var friend = collection.find(Document("username", receiver)).first()
+        var updateFriend = Document("\$push", Document("friends.\$[elem].messages", message_doc))
+        var updateFriendOptions = UpdateOptions().arrayFilters(listOf(Document("elem.username", sender)))
 
-        // update sender
-        var senderUpdate = Document("\$set", Document("friends", Gson().toJson(senderObject)))
-        collection.updateOne(user, senderUpdate)
+        collection.updateOne(friend, updateFriend, updateFriendOptions)
 
-        // update receiver
-        var receiverUpdate = Document("\$set", Document("friends", Gson().toJson(receiverObject)))
-        collection.updateOne(friend, receiverUpdate)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         return true
 

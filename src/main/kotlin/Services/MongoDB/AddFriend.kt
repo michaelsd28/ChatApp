@@ -31,6 +31,13 @@ class AddFriend(private val newFriend: Req_add_friend) : Operation {
             val friend_user_as_friend = friendUserObject.ToFriend()
 
 
+            // friend_user_as_friend to document
+            val friend_user_as_friend_document = Document.parse(Gson().toJson(friend_user_as_friend))
+
+            // my_user_as_friend to document
+            val my_user_as_friend_document = Document.parse(Gson().toJson(my_user_as_friend))
+
+
             // validate if friend is already in my friends list
             val hasFriend = myUserObject.hasFriend(newFriend.username)
 
@@ -43,10 +50,10 @@ class AddFriend(private val newFriend: Req_add_friend) : Operation {
             }
 
             // add friend to my friends list
-            collection.updateOne(myUser, Document("\$push", Document("friends", Gson().toJson(friend_user_as_friend))))
+            collection.updateOne(myUser, Document("\$push", Document("friends", friend_user_as_friend_document)))
 
             // add me to friend's friends list
-            collection.updateOne(friendUser, Document("\$push", Document("friends", Gson().toJson(my_user_as_friend))))
+            collection.updateOne(friendUser, Document("\$push", Document("friends",my_user_as_friend_document )))
 
 
 
