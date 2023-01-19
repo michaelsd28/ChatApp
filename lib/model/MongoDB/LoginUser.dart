@@ -5,6 +5,7 @@ import 'package:chat_app/model/User.dart';
 
 // add http package
 import 'package:http/http.dart' as http;
+import 'package:localstorage/localstorage.dart';
 
 import '../GlobalStore.dart';
 
@@ -15,6 +16,13 @@ class LoginUser implements Operation {
 
   @override
   Future<void> execute() async {
+
+
+
+
+
+
+    print("LoginUser*** username::${user.username} password::${user.password} ");
     var headers = {'Content-Type': 'application/json'};
     var request =
         http.Request('POST', Uri.parse('http://localhost:8080/login'));
@@ -32,7 +40,9 @@ class LoginUser implements Operation {
 
     if (status == 'success') {
       String token = jsonBody["token"];
+
       store.local_storage.setItem("JWT_token", token);
+
 
       print( "login user in localhost:8080/login  responseBody -> $responseBody");
 

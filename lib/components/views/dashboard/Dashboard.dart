@@ -1,9 +1,11 @@
 import 'package:chat_app/components/views/chat/MainChat.dart';
 import 'package:chat_app/components/views/others/AddFriend_widget.dart';
+import 'package:chat_app/model/GlobalStore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/FriendUser.dart';
 import '../../../model/MongoDB/GetFriends.dart';
+import '../../../model/MongoDB/GetMessages.dart';
 import '../../../model/MongoDB/MongoDBService.dart';
 
 class Dashboard extends StatefulWidget {
@@ -14,11 +16,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
-
-
-
   List<FriendUser> friends = [];
+
   @override
   void initState() {
     super.initState();
@@ -27,26 +26,20 @@ class _DashboardState extends State<Dashboard> {
     print("initState() -> friends: $friends");
   }
 
-
-
   void get_friends() async {
     GetFriends getFriends = GetFriends();
     List<FriendUser> newList = [];
 
-    newList = await  getFriends.GetList();
+    newList = await getFriends.GetList();
 
     setState(() {
       print("get_friends() -> friends: $friends and newList: $newList");
       friends = newList;
-
     });
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -111,7 +104,7 @@ class UserFriend_widget extends StatelessWidget {
         radius: 25,
       ),
       // leading: Image.asset('assets/authentication/profile_pic.png'),
-      title: Text(username! , style: TextStyle(color: Colors.white)),
+      title: Text(username!, style: TextStyle(color: Colors.white)),
       subtitle: Text(lastMessage!, style: TextStyle(color: Colors.white)),
       onTap: () {
         var route = MaterialPageRoute(

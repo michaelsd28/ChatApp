@@ -18,7 +18,6 @@ class GetFriends implements Operation {
     GlobalStore globalStore = GlobalStore.getInstance();
     String? token = globalStore.local_storage.getItem("JWT_token");
     String requestUrl = "http://localhost:8080/get-friends/$token";
-    print("request url: $requestUrl");
     var request = http.Request('GET', Uri.parse(requestUrl));
     var headers = {'Content-Type': 'application/json'};
 
@@ -35,7 +34,7 @@ class GetFriends implements Operation {
       for (var element in list) {
         FriendUser newFriend = FriendUser();
         newFriend.name = element["name"];
-        newFriend.username = element["name"];
+        newFriend.username = element["username"];
         newFriend.image = element["image"];
         friends.add(newFriend);
       }

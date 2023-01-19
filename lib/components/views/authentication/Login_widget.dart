@@ -219,6 +219,10 @@ class Login_widget extends StatelessWidget {
   }
 
   void _login(BuildContext context, String username, String password) async {
+
+    GlobalStore globalStore = GlobalStore.getInstance();
+    globalStore.local_storage.setItem("FriendUsername", username);
+
     User user = User(username: username, password: password);
 
     LoginUser loginUser = LoginUser(user);

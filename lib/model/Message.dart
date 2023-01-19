@@ -1,17 +1,29 @@
 class Message {
-  String? id;
-  String? senderId;
-  String? receiverId;
+
+  String? sender;
+  String? receiver;
   String? message;
   String? timestamp;
   String? type;
 
   Message({
-    this.id,
-    this.senderId,
-    this.receiverId,
+    this.sender,
+    this.receiver,
     this.message,
     this.timestamp,
     this.type,
   });
+
+  static Message fromJson(message) {
+
+    return Message(
+      sender: message['sender'],
+      receiver: message['receiver'],
+      message: message['message'],
+      timestamp: message['timestamp'],
+      type: message['type'],
+    );
+
+
+  }
 }

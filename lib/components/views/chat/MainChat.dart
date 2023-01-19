@@ -1,5 +1,10 @@
+import 'package:chat_app/model/FriendUser.dart';
+import 'package:chat_app/model/GlobalStore.dart';
+import 'package:chat_app/model/Message.dart';
+import 'package:chat_app/model/MongoDB/GetMessages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 
 
 void Scroll_to_bottom( ScrollController scrollController) {
@@ -24,6 +29,8 @@ class _MainChatState extends State<MainChat> {
 
   final ScrollController scrollController = ScrollController(   keepScrollOffset: true,);
 
+  String? friendUsername;
+
   @override
   void initState() {
     //scroll to bottom when chat is opened
@@ -40,7 +47,36 @@ class _MainChatState extends State<MainChat> {
       scrollController.jumpTo(scrollController.position.maxScrollExtent);
     });
 
-    print("initState called in MainChat");
+    get_messages();
+
+    GlobalStore globalStore = GlobalStore.getInstance();
+
+     friendUsername = globalStore.local_storage.getItem('FriendUsername');
+
+
+  }
+
+  List<Message> messages = [];
+
+
+
+  void get_messages() async {
+
+
+
+    GetMessages getFriends = GetMessages();
+    List<Message> newMessages = [];
+
+    newMessages = await  getFriends.GetMessageList();
+
+    setState(() {
+
+      messages = newMessages;
+
+
+
+
+    });
 
   }
 
@@ -80,49 +116,15 @@ class _MainChatState extends State<MainChat> {
           child: Column(
             children: [
               Expanded(
+                // get all messages that are from void init state get_messages()
                 child: ListView.builder(
                   controller: scrollController,
-                  itemCount: 20,
-                  itemBuilder: (context, index) {
-
-                    return Container(
-                      margin: const EdgeInsets.all(10),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Stack (
-                        alignment: index % 2 == 0 ? Alignment.centerLeft : Alignment.centerRight,
-                        children: [
-                          Container(
-                              // rounded corners
-                              decoration: BoxDecoration(
-                                color: index % 2 == 0 ?  Colors.lightGreenAccent :  Colors.lightBlueAccent,
-                                // border radius for the whole container except bottom right
-                                borderRadius: index % 2 == 0 ? const BorderRadius.only(
-                                  bottomRight: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                ) : const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                ),
-
-                              ),
-                            padding: const EdgeInsets.all(10),
-
-
-                              // add  index to text
-
-                              child:  Text('Message from user very long $index',  style: TextStyle(fontSize: 16),),
-                          ),
-                        ],
-                      ),
-
-                    );
+                  itemCount: messages.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return messages[index].sender == friendUsername ?  FriendBubble(message: messages[index].message!) : ChatBubble (message: messages[index].message!);
                   },
+
+
                 ),
               ),
               Container(
@@ -171,3 +173,96 @@ class _MainChatState extends State<MainChat> {
         ));
   }
 }
+
+
+class ChatBubble extends StatelessWidget {
+
+  String? message;
+
+
+   ChatBubble({Key? key, required this.message}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Stack (
+        alignment:  Alignment.centerRight,
+        children: [
+          Container(
+            // rounded corners
+            decoration: const BoxDecoration(
+              color:   Colors.lightBlueAccent,
+              // border radius for the whole container except bottom right
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+                bottomLeft: Radius.circular(10),
+              ),
+
+            ),
+            padding: const EdgeInsets.all(10),
+
+
+            // add  index to text
+
+            child:   Text(message!,  style: TextStyle(fontSize: 16),),
+          ),
+        ],
+      ),
+
+    );
+  }
+}
+
+
+
+class FriendBubble extends StatelessWidget {
+
+  String? message;
+
+    FriendBubble({Key? key, required this.message }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Stack (
+        alignment:  Alignment.centerLeft ,
+        children: [
+          Container(
+            // rounded corners
+            decoration: const BoxDecoration(
+              color: Colors.lightGreenAccent ,
+              // border radius for the whole container except bottom right
+              borderRadius:  BorderRadius.only(
+                bottomRight: Radius.circular(10),
+                topRight: Radius.circular(10),
+                bottomLeft: Radius.circular(10),
+              )
+
+            ),
+            padding: const EdgeInsets.all(10),
+
+
+            // add  index to text
+
+            child:   Text(message!,  style: TextStyle(fontSize: 16),),
+          ),
+        ],
+      ),
+
+    );
+  }
+}
+

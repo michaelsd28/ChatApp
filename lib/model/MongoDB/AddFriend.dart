@@ -20,7 +20,7 @@ class AddFriend_widget implements Operation {
 
     var globalStore = GlobalStore.getInstance();
     var token = globalStore.local_storage.getItem("JWT_token");
-    var isInsered = globalStore.local_storage.getItem("isInserted");
+
 
     var headers = {
       'Content-Type': 'application/json'
