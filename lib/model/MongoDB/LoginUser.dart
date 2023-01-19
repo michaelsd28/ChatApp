@@ -22,7 +22,7 @@ class LoginUser implements Operation {
 
 
 
-    print("LoginUser*** username::${user.username} password::${user.password} ");
+
     var headers = {'Content-Type': 'application/json'};
     var request =
         http.Request('POST', Uri.parse('http://localhost:8080/login'));
@@ -44,13 +44,13 @@ class LoginUser implements Operation {
       store.local_storage.setItem("JWT_token", token);
 
 
-      print( "login user in localhost:8080/login  responseBody -> $responseBody");
+
 
 
     } else if (status == 'fail') {
       store.local_storage.setItem("JWT_token", null);
 
-      print("response.reasonPhrase -> ${response.reasonPhrase}");
+
     }
   }
 }

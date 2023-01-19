@@ -1,7 +1,9 @@
 import 'package:chat_app/model/FriendUser.dart';
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:chat_app/model/Message.dart';
+import 'package:chat_app/model/MongoDB/AddMessages.dart';
 import 'package:chat_app/model/MongoDB/GetMessages.dart';
+import 'package:chat_app/model/MongoDB/MongoDBService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
@@ -29,7 +31,9 @@ class _MainChatState extends State<MainChat> {
 
   final ScrollController scrollController = ScrollController(   keepScrollOffset: true,);
 
-  String? friendUsername;
+  var messageController = TextEditingController();
+
+  String? FriendUsername;
 
   @override
   void initState() {
@@ -51,7 +55,7 @@ class _MainChatState extends State<MainChat> {
 
     GlobalStore globalStore = GlobalStore.getInstance();
 
-     friendUsername = globalStore.local_storage.getItem('FriendUsername');
+     FriendUsername = globalStore.local_storage.getItem('FriendUsername');
 
 
   }
@@ -96,11 +100,6 @@ class _MainChatState extends State<MainChat> {
 
 
 
-
-
-
-
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('Chat'),
@@ -121,7 +120,7 @@ class _MainChatState extends State<MainChat> {
                   controller: scrollController,
                   itemCount: messages.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return messages[index].sender == friendUsername ?  FriendBubble(message: messages[index].message!) : ChatBubble (message: messages[index].message!);
+                    return messages[index].sender == FriendUsername ?  FriendBubble(message: messages[index].message!) : ChatBubble (message: messages[index].message!);
                   },
 
 
@@ -136,11 +135,12 @@ class _MainChatState extends State<MainChat> {
                 ),
                 child: Row(
                   children: [
-                    const Expanded(
+                     Expanded(
                       child: TextField(
+                        controller: messageController,
 
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
+                        style: const TextStyle(color: Colors.white),
+                        decoration: const InputDecoration(
                           hintText: 'Type a message',
                           hintStyle: TextStyle(color: Colors.white),
                           border: InputBorder.none,
@@ -156,10 +156,15 @@ class _MainChatState extends State<MainChat> {
                         borderRadius: BorderRadius.circular(40),
                       ),
                       child:  IconButton(
-                        onPressed: () {
-                          // add message to the list
-                          // scroll to bottom
-                          Scroll_to_bottom(scrollController);
+                        onPressed: () async {
+                          var text = messageController.text;
+                          AddMessages addMessages = AddMessages(text);
+                          MongoDBService mongoDBService = MongoDBService(addMessages);
+                         await  mongoDBService.execute() ;
+
+
+                          messageController.clear();
+
                         },
                         icon: const Icon(Icons.send, color: Colors.white,),
                         color: Colors.white,
@@ -211,7 +216,7 @@ class ChatBubble extends StatelessWidget {
 
             // add  index to text
 
-            child:   Text(message!,  style: TextStyle(fontSize: 16),),
+            child:   Text(message!,  style: const TextStyle(fontSize: 16),),
           ),
         ],
       ),
@@ -257,7 +262,7 @@ class FriendBubble extends StatelessWidget {
 
             // add  index to text
 
-            child:   Text(message!,  style: TextStyle(fontSize: 16),),
+            child:   Text(message!,  style: const TextStyle(fontSize: 16),),
           ),
         ],
       ),

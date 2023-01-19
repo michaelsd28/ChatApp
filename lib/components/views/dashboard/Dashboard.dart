@@ -23,7 +23,7 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
 
     get_friends();
-    print("initState() -> friends: $friends");
+
   }
 
   void get_friends() async {
@@ -33,7 +33,7 @@ class _DashboardState extends State<Dashboard> {
     newList = await getFriends.GetList();
 
     setState(() {
-      print("get_friends() -> friends: $friends and newList: $newList");
+
       friends = newList;
     });
   }
@@ -107,6 +107,10 @@ class UserFriend_widget extends StatelessWidget {
       title: Text(username!, style: TextStyle(color: Colors.white)),
       subtitle: Text(lastMessage!, style: TextStyle(color: Colors.white)),
       onTap: () {
+
+        GlobalStore globalStore = GlobalStore.getInstance();
+        globalStore.local_storage.setItem("FriendUsername", username);
+
         var route = MaterialPageRoute(
           builder: (BuildContext context) => const MainChat(),
         );

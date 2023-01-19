@@ -40,11 +40,11 @@ class AddFriend_widget implements Operation {
    var  documentJson = jsonDecode(document);
 
     if(documentJson["status"] == "success"){
-      print("Friend added successfully");
+
       globalStore.local_storage.setItem("isInserted", true);
     }
     else{
-      print("Friend not added");
+
       globalStore.local_storage.setItem("isInserted", false);
 
     }
