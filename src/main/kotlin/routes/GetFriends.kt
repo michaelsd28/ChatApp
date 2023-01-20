@@ -15,7 +15,7 @@ fun Application.GetFriends() {
             get("/get-friends/{JWT_token}") {
 
                 val token = call.parameters["JWT_token"]
-                println("token: $token")
+
 
 
                 val getFriends = FindFriends(token!!)

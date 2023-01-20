@@ -16,7 +16,7 @@ fun Application.Register() {
             // get RegisterUser
             val registerUser = call.receive<RegisterUser>()
 
-            println("RegisterUser: $registerUser")
+
 
             val insertUser = InsertUser(registerUser)
             val mongoDBService = MongoDBService(insertUser)

@@ -7,7 +7,7 @@ import java.security.Key;
 
 object JWTServices {
 
-    val secret_key:String = "secret key for jwt token generation and validation"
+    val secret_key:String = "secret key for jwt token generation and validation 2"
     //The specified key byte array is 48 bits which is not secure enough for any JWT HMAC-SHA algorithm.  The JWT JWA Specification (RFC 7518, Section 3.2) states that keys used with HMAC-SHA algorithms MUST have a size >= 256 bits (the key size must be greater than or equal to the hash output size).
 
 

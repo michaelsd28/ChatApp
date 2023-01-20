@@ -24,7 +24,7 @@ fun Application.AddFriend() {
 
            val isToken = JWTServices.validateJWTToken(newFriend.token)
 
-            print("isToken: $newFriend.token")
+
 
             if (!isToken) {
                 call.respond(mapOf("status" to "fail"))

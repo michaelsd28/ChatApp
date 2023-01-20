@@ -1,8 +1,9 @@
 package model.User
 
+import com.google.gson.Gson
 import model.Request.Req_insert_message
 
-class Message {
+class Message() {
 
 
     var sender: String = ""
@@ -10,6 +11,7 @@ class Message {
     var message: String = ""
     var timestamp: String = ""
     var type: String = ""
+
 
     /* json format
     {
@@ -31,6 +33,28 @@ class Message {
         message.type = reqAddMessage.type
         return message
 
+
+    }
+
+    companion object {
+
+        fun fromString(message: String): Message? {
+
+
+            var gson = Gson()
+            var classType = Message::class.java
+
+            var messageObj: Message?
+
+            return try {
+                messageObj = gson.fromJson(message, classType)
+                messageObj
+            } catch (e: Exception) {
+                null
+            }
+
+
+        }
 
     }
 

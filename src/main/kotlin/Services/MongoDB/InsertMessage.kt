@@ -4,13 +4,11 @@ import Services.GlobalStore
 import com.google.gson.Gson
 import com.mongodb.client.model.UpdateOptions
 import io.ktor.util.*
-import model.FriendUser
 import model.Request.Req_insert_message
 import model.User.Message
-import model.User.User
 import org.bson.Document
 
-class InsertMessage(val req_add_message: Req_insert_message) :Operation {
+class InsertMessage(private val messageObject: Message) :Operation {
 
 
 
@@ -22,20 +20,17 @@ class InsertMessage(val req_add_message: Req_insert_message) :Operation {
 
 
 
-        var sender = req_add_message.sender
-        var receiver = req_add_message.receiver
-
-        var token = req_add_message.token
-        var messageObject: Message = Message().fromRequest(req_add_message)
+        var sender = messageObject.sender
+        var receiver = messageObject.receiver
 
 
 
 
-        var isValidToken = Services.Authentication.JWTServices.validateJWTToken(token)
 
-        if (!isValidToken) {
-            return false
-        }
+
+
+
+
 
         var user = collection.find(Document("username", sender)).first()
 

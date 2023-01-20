@@ -12,7 +12,7 @@ class InsertUser(private val registerUser: RegisterUser) : Operation {
 
     override fun execute(): Boolean {
 
-        print("Inserting user $registerUser into database")
+
 
         val globalStore = GlobalStore.getGlobalStore()
         val collection = globalStore.GetCollection("Users")

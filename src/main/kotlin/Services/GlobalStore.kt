@@ -4,27 +4,24 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import io.ktor.server.websocket.*
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries.fromProviders
 import org.bson.codecs.configuration.CodecRegistries.fromRegistries
 import org.bson.codecs.pojo.PojoCodecProvider
 
 // singleton
-object GlobalStore  {
+object GlobalStore {
 
     val mongoClient: MongoClient = MongoClients.create("mongodb://localhost:6082/")
-
-
-
-
-
-
 
 
     val database = mongoClient.getDatabase("ChatDB")
 
 
     var _data = mutableMapOf<String, Any>()
+
+    var _sessions = mutableMapOf<String, DefaultWebSocketServerSession>()
 
 
     fun getGlobalStore(): GlobalStore {
@@ -47,7 +44,6 @@ object GlobalStore  {
 
 
     }
-
 
 
 }

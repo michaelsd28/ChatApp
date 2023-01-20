@@ -96,28 +96,30 @@ class User {
 
     companion object {
         fun fromDocument(user: Document?): User {
+
+            // convert to User object
+            /*{"_id": {"$oid": "63c49d9beaf2763214e2957a"}, "name": "postman_name2", "username": "postman_username2", "password": "1234", "image": "https://cdn.shopify.com/s/files/1/0238/7617/articles/e33c2fa94c03efa06678116f80d62d0d_708x.jpg?v=1590599656", "friends": [{"name": "postman_name", "username": "postman_username", "image": "https://staticg.sportskeeda.com/editor/2022/11/a402f-16694231050443-1920.jpg", "messages": []}]}*/
+            // remove _id
             var userObject = User()
             userObject.name = user?.getString("name") ?: ""
             userObject.username = user?.getString("username") ?: ""
             userObject.password = user?.getString("password") ?: ""
             userObject.image = user?.getString("image") ?: ""
-            var friends= user?.get("friends", String::class.java)
-
-
+            userObject.friends = user?.get("friends") as ArrayList<FriendUser>
 
             var gson = Gson()
-//            var friendUser = gson.fromJson(friends, Array<FriendUser>::class.java)
-
-            for (friend in friends!!) {
-
-                println("user::class fromDocument - friend: $friend")
-
-            }
+            var userString = gson.toJson(userObject)
+            userObject = gson.fromJson(userString, User::class.java)
 
 
 
 
             return userObject
+
+
+
+
+
 
         }
 

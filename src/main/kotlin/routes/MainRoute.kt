@@ -10,6 +10,7 @@ fun Application.MainRoute() {
     AddFriend()
     GetFriends()
     Message()
+    WebSocket()
 
 
 }

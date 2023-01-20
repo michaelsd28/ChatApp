@@ -2,7 +2,9 @@ package Services.MongoDB
 
 import Services.Authentication.JWTServices
 import Services.GlobalStore
+import com.google.gson.Gson
 import model.FriendUser
+import model.User.User
 import org.bson.Document
 
 class FindFriends(private val token: String) : Operation {
@@ -23,23 +25,15 @@ class FindFriends(private val token: String) : Operation {
 
         val user = collection.find(Document("username", userName)).first()
 
-        val friends = user?.get("friends") as List<String>
-
-        val friendsList: List<FriendUser> = friends.map { friend ->
-            val friendDocument = Document.parse(friend)
-            var newFriend = FriendUser()
-            newFriend.name = friendDocument.getString("name")
-            newFriend.username = friendDocument.getString("username")
-            newFriend.image = friendDocument.getString("image")
-
-            newFriend
-        }
+        var user_string = Gson().toJson(user)
+        println("user_string: $user_string")
+        var user_obj  = Gson().fromJson(user_string, User::class.java)
 
 
 
-        println("<*>friendsList: $friendsList")
 
-        return friendsList
+
+        return user_obj.friends
 
 
     }

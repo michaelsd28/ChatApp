@@ -14,6 +14,5 @@ fun main() {
 fun Application.module() {
     configureHTTP()
     configureSerialization()
-    configureSockets()
     MainRoute()
 }

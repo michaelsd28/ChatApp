@@ -12,6 +12,7 @@ class UserAuthentication(private val user: UserLogin) : Operation {
         val collection = globalStore.GetCollection("Users")
 
 
+
         var userLogin =user.toDocument()
 
         val isUser = collection.find(userLogin).first()
