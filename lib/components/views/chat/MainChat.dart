@@ -17,7 +17,6 @@ void Scroll_to_bottom(ScrollController scrollController) {
     duration: const Duration(milliseconds: 300),
     curve: Curves.easeOut,
   );
-
 }
 
 class MainChat extends StatefulWidget {
@@ -32,9 +31,12 @@ class _MainChatState extends State<MainChat> {
     keepScrollOffset: true,
   );
 
+  late WebSocket _socket;
+
   var messageController = TextEditingController();
 
   String? FriendUsername;
+  String? myUsername;
   List<Message> messages = [];
 
   // receive  messages from server and add to messages list
@@ -47,40 +49,39 @@ class _MainChatState extends State<MainChat> {
 
     GlobalStore globalStore = GlobalStore.getInstance();
     String? token = globalStore.local_storage.getItem("JWT_token");
-    var myUsername = globalStore.local_storage.getItem("MyUsername");
+    myUsername = globalStore.local_storage.getItem("MyUsername");
 
     var connectionString = "ws://10.0.0.9:8080/chat-server";
     // create a websocket connection
-    WebSocket webSocket = await WebSocket.connect(connectionString);
+    _socket = await WebSocket.connect(connectionString);
 
-    webSocket.listen((event) {
+    _socket.listen((event) {
       var jsonBody = jsonDecode(event);
 
       Message message = Message.fromJson(jsonBody);
       var messageLength = messages.length;
 
       setState(() {
-
         Scroll_to_bottom(scrollController);
         messages.add(message);
-
       });
-
-
-
-
-
     });
 
     var connectionBody = {"username": myUsername, "token": token};
 
     if (!isConnected) {
       String connectionBodyString = jsonEncode(connectionBody);
-      webSocket.add(connectionBodyString);
+      _socket.add(connectionBodyString);
       print("connection body is $connectionBodyString connection was executed");
       isConnected = true;
     }
   }
+
+  void _sendMessage(Message message)  {
+    _socket.add(jsonEncode(message));
+  }
+
+  // create websocket connection and listen for messages from server and user on textfield submit send message to server
 
   @override
   void initState() {
@@ -138,13 +139,12 @@ class _MainChatState extends State<MainChat> {
 
         body: Container(
           //   color: const Color(0xFF111827),
-             color: const Color(0xFF111827),
+          color: const Color(0xFF111827),
           child: Column(
             children: [
               Expanded(
                 // get all messages that are from void init state get_messages()
                 child: ListView.builder(
-
                   controller: scrollController,
                   itemCount: messages.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -184,12 +184,30 @@ class _MainChatState extends State<MainChat> {
                       child: IconButton(
                         onPressed: () async {
                           var text = messageController.text;
-                          AddMessages addMessages = AddMessages(text);
-                          MongoDBService mongoDBService =
-                              MongoDBService(addMessages);
-                          await mongoDBService.execute();
+                          // AddMessages addMessages = AddMessages(text);
+                          // MongoDBService mongoDBService =
+                          //     MongoDBService(addMessages);
+                          // await mongoDBService.execute();
 
+                          print("text is $text");
+
+                          // add message to the list
+                          var messageJson = {
+                            "sender": myUsername,
+                            "receiver": FriendUsername,
+                            "message": text,
+                            "timestamp": DateTime.now().toString(),
+                            "type": "text"
+                          };
+                          Message message = Message.fromJson(messageJson);
+                          setState(() {
+                            messages.add(message);
+                          });
                           messageController.clear();
+                          // send message to server
+                           _sendMessage(message);
+
+
                         },
                         icon: const Icon(
                           Icons.send,
