@@ -25,7 +25,7 @@ class LoginUser implements Operation {
 
     var headers = {'Content-Type': 'application/json'};
     var request =
-        http.Request('POST', Uri.parse('http://localhost:8080/login'));
+        http.Request('POST', Uri.parse('http://10.0.0.9:8080/login'));
     request.body =
         json.encode({"username": user.username, "password": user.password});
     request.headers.addAll(headers);
@@ -40,6 +40,7 @@ class LoginUser implements Operation {
 
     if (status == 'success') {
       String token = jsonBody["token"];
+      print("token is $token");
 
       store.local_storage.setItem("JWT_token", token);
 

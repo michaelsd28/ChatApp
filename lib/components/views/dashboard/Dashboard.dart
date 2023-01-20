@@ -1,6 +1,7 @@
 import 'package:chat_app/components/views/chat/MainChat.dart';
 import 'package:chat_app/components/views/others/AddFriend_widget.dart';
 import 'package:chat_app/model/GlobalStore.dart';
+import 'package:chat_app/model/Server/WebsocketService.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/FriendUser.dart';
@@ -22,7 +23,10 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
 
+
+
     get_friends();
+
 
   }
 
@@ -33,7 +37,6 @@ class _DashboardState extends State<Dashboard> {
     newList = await getFriends.GetList();
 
     setState(() {
-
       friends = newList;
     });
   }
@@ -107,7 +110,6 @@ class UserFriend_widget extends StatelessWidget {
       title: Text(username!, style: TextStyle(color: Colors.white)),
       subtitle: Text(lastMessage!, style: TextStyle(color: Colors.white)),
       onTap: () {
-
         GlobalStore globalStore = GlobalStore.getInstance();
         globalStore.local_storage.setItem("FriendUsername", username);
 

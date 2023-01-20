@@ -17,7 +17,7 @@ class GetFriends implements Operation {
 
     GlobalStore globalStore = GlobalStore.getInstance();
     String? token = globalStore.local_storage.getItem("JWT_token");
-    String requestUrl = "http://localhost:8080/get-friends/$token";
+    String requestUrl = "http://10.0.0.9:8080/get-friends/$token";
     var request = http.Request('GET', Uri.parse(requestUrl));
     var headers = {'Content-Type': 'application/json'};
 
