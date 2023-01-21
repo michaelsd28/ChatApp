@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:localstorage/localstorage.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class GlobalStore {
 
@@ -15,15 +16,16 @@ class GlobalStore {
 
   // do the same with websockets
 
-   WebSocket? webSocket ;
-   Future<WebSocket> GetWebSocket() async {
-    webSocket ??= await WebSocket.connect("ws://10.0.0.9:8080/chat-server");
-    return webSocket!;
+
+  WebSocketChannel? _channel ;
+
+  WebSocketChannel? GetChannel() {
+
+    _channel ??= WebSocketChannel.connect(
+        Uri.parse('ws://10.0.0.9:8080/chat-server'),
+      );
+    return _channel!;
   }
-
-
-
-
 
 
   static GlobalStore? _singleton;

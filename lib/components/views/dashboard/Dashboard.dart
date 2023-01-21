@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:chat_app/components/views/chat/MainChat.dart';
 import 'package:chat_app/components/views/others/AddFriend_widget.dart';
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:chat_app/model/Server/WebsocketService.dart';
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../model/FriendUser.dart';
 import '../../../model/MongoDB/GetFriends.dart';
@@ -23,11 +26,7 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
 
-
-
     get_friends();
-
-
   }
 
   void get_friends() async {
@@ -88,12 +87,7 @@ class UserFriend_widget extends StatelessWidget {
   final String? lastMessage;
   final String? image;
 
-  const UserFriend_widget(
-      {Key? key,
-      required this.username,
-      required this.lastMessage,
-      required this.image})
-      : super(key: key);
+  const UserFriend_widget({Key? key, required this.username, required this.lastMessage, required this.image}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,13 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:chat_app/model/Message.dart';
-import 'package:chat_app/model/MongoDB/AddMessages.dart';
 import 'package:chat_app/model/MongoDB/GetMessages.dart';
 import 'package:flutter/material.dart';
-
-import '../../../model/MongoDB/MongoDBService.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 void Scroll_to_bottom(ScrollController scrollController) {
   // scroll 200 pixels down
@@ -31,57 +28,49 @@ class _MainChatState extends State<MainChat> {
     keepScrollOffset: true,
   );
 
-  late WebSocket _socket;
-
   var messageController = TextEditingController();
-
+  GlobalStore globalStore = GlobalStore.getInstance();
   String? FriendUsername;
   String? myUsername;
   List<Message> messages = [];
+  late final WebSocketChannel? _channel;
 
   // receive  messages from server and add to messages list
+
   static bool isConnected = false;
 
   void SocketConnection() async {
-    if (isConnected) {
-      return;
-    }
-
-    GlobalStore globalStore = GlobalStore.getInstance();
+    _channel = globalStore.GetChannel();
     String? token = globalStore.local_storage.getItem("JWT_token");
     myUsername = globalStore.local_storage.getItem("MyUsername");
 
-    var connectionString = "ws://10.0.0.9:8080/chat-server";
-    // create a websocket connection
-    _socket = await WebSocket.connect(connectionString);
-
-    _socket.listen((event) {
-      var jsonBody = jsonDecode(event);
-
-      Message message = Message.fromJson(jsonBody);
-      var messageLength = messages.length;
-
-      setState(() {
-        Scroll_to_bottom(scrollController);
-        messages.add(message);
-      });
-    });
 
     var connectionBody = {"username": myUsername, "token": token};
-
     if (!isConnected) {
       String connectionBodyString = jsonEncode(connectionBody);
-      _socket.add(connectionBodyString);
+      _channel!.sink.add(connectionBodyString);
       print("connection body is $connectionBodyString connection was executed");
       isConnected = true;
     }
+
+
+
+    _channel!.stream.listen((event) {
+      var jsonBody = jsonDecode(event);
+      print("Message from server: $jsonBody");
+      var message = Message(
+          sender: jsonBody["sender"],
+          receiver: jsonBody["receiver"],
+          message: jsonBody["message"],
+          timestamp: jsonBody["timestamp"],
+          type: jsonBody["type"]);
+      setState(() {
+        messages.add(message);
+      });
+      Scroll_to_bottom(scrollController);
+    });
   }
 
-  void _sendMessage(Message message)  {
-    _socket.add(jsonEncode(message));
-  }
-
-  // create websocket connection and listen for messages from server and user on textfield submit send message to server
 
   @override
   void initState() {
@@ -97,26 +86,30 @@ class _MainChatState extends State<MainChat> {
       scrollController.jumpTo(scrollController.position.maxScrollExtent);
     });
 
-    get_messages();
-
-    GlobalStore globalStore = GlobalStore.getInstance();
 
     FriendUsername = globalStore.local_storage.getItem('FriendUsername');
-
+    get_messages();
     SocketConnection();
   }
 
+  @override
+  void dispose() {
+    _channel!.sink.close();
+    super.dispose();
+  }
+
   void get_messages() async {
-    GetMessages getFriends = GetMessages();
+    GetMessages getMessages = GetMessages();
     List<Message> newMessages = [];
 
-    newMessages = await getFriends.GetMessageList();
+    newMessages = await getMessages.GetMessageList();
+
 
     setState(() {
       messages = newMessages;
+      // scroll to bottom of the list
+      Scroll_to_bottom(scrollController);
     });
-    // scroll to bottom of the list
-    Scroll_to_bottom(scrollController);
   }
 
   @override
@@ -134,9 +127,6 @@ class _MainChatState extends State<MainChat> {
         ),
         // 20 items
 
-        // in the body i want a text bubble with a message and a limited size of 200px and a scrollable list of messages and is in a listview.builder
-        // i want to add a textfield and a send button
-
         body: Container(
           //   color: const Color(0xFF111827),
           color: const Color(0xFF111827),
@@ -144,15 +134,15 @@ class _MainChatState extends State<MainChat> {
             children: [
               Expanded(
                 // get all messages that are from void init state get_messages()
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: messages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return messages[index].sender == FriendUsername
-                        ? FriendBubble(message: messages[index].message!)
-                        : ChatBubble(message: messages[index].message!);
-                  },
-                ),
+                  child: ListView.builder(
+                    controller: scrollController,
+                    itemCount: messages.length,
+                    itemBuilder: (BuildContext listContext, int index) {
+                      return messages[index].sender == FriendUsername
+                          ? FriendBubble(message: messages[index].message!)
+                          : ChatBubble(message: messages[index].message!);
+                    },
+                  )
               ),
               Container(
                 margin: const EdgeInsets.all(10),
@@ -182,14 +172,9 @@ class _MainChatState extends State<MainChat> {
                         borderRadius: BorderRadius.circular(40),
                       ),
                       child: IconButton(
-                        onPressed: () async {
+                        onPressed: () {
                           var text = messageController.text;
-                          // AddMessages addMessages = AddMessages(text);
-                          // MongoDBService mongoDBService =
-                          //     MongoDBService(addMessages);
-                          // await mongoDBService.execute();
 
-                          print("text is $text");
 
                           // add message to the list
                           var messageJson = {
@@ -204,10 +189,16 @@ class _MainChatState extends State<MainChat> {
                             messages.add(message);
                           });
                           messageController.clear();
-                          // send message to server
-                           _sendMessage(message);
+
+                          /// send message to server
+                          if (text.isNotEmpty ) {
+                            _channel?.sink.add(jsonEncode(messageJson));
+                            messageController.clear();
+                          }
 
 
+                          /// scroll to bottom of the list
+                          Scroll_to_bottom(scrollController);
                         },
                         icon: const Icon(
                           Icons.send,
