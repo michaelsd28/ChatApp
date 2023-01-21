@@ -25,9 +25,16 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+    print("dashboard init state was executed");
 
     get_friends();
   }
+
+
+
+
+
+
 
   void get_friends() async {
     GetFriends getFriends = GetFriends();

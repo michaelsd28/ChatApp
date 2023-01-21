@@ -3,7 +3,6 @@ import 'package:chat_app/components/views/sign_up/SignUp_widget.dart';
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:chat_app/model/MongoDB/LoginUser.dart';
 import 'package:chat_app/model/MongoDB/MongoDBService.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../model/User.dart';
 

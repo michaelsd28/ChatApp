@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:chat_app/model/GlobalStore.dart';
@@ -25,7 +26,7 @@ class MainChat extends StatefulWidget {
 
 class _MainChatState extends State<MainChat> {
   final ScrollController scrollController = ScrollController(
-    keepScrollOffset: true,
+    keepScrollOffset: false,
   );
 
   var messageController = TextEditingController();
@@ -44,16 +45,19 @@ class _MainChatState extends State<MainChat> {
     String? token = globalStore.local_storage.getItem("JWT_token");
     myUsername = globalStore.local_storage.getItem("MyUsername");
 
+    print("SocketConnection was executed broadcast ${_channel!.stream.isBroadcast}");
+
+    // remove the stream listener if it exists to avoid multiple listeners
 
     var connectionBody = {"username": myUsername, "token": token};
-    if (!isConnected) {
+    if (!isConnected || _channel == null) {
       String connectionBodyString = jsonEncode(connectionBody);
       _channel!.sink.add(connectionBodyString);
       print("connection body is $connectionBodyString connection was executed");
       isConnected = true;
     }
 
-
+    // add new stream listener to channel
 
     _channel!.stream.listen((event) {
       var jsonBody = jsonDecode(event);
@@ -68,9 +72,12 @@ class _MainChatState extends State<MainChat> {
         messages.add(message);
       });
       Scroll_to_bottom(scrollController);
+    }).onDone(() {
+      print("Socket connection was closed");
+
+
     });
   }
-
 
   @override
   void initState() {
@@ -86,16 +93,9 @@ class _MainChatState extends State<MainChat> {
       scrollController.jumpTo(scrollController.position.maxScrollExtent);
     });
 
-
     FriendUsername = globalStore.local_storage.getItem('FriendUsername');
     get_messages();
     SocketConnection();
-  }
-
-  @override
-  void dispose() {
-    _channel!.sink.close();
-    super.dispose();
   }
 
   void get_messages() async {
@@ -103,7 +103,6 @@ class _MainChatState extends State<MainChat> {
     List<Message> newMessages = [];
 
     newMessages = await getMessages.GetMessageList();
-
 
     setState(() {
       messages = newMessages;
@@ -121,8 +120,19 @@ class _MainChatState extends State<MainChat> {
     });
 
     return Scaffold(
+        // on back button event
         appBar: AppBar(
           title: const Text('Chat'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              // go back to previous page
+
+
+              Navigator.pop(context);
+
+            },
+          ),
           backgroundColor: const Color(0xFF374151),
         ),
         // 20 items
@@ -133,17 +143,16 @@ class _MainChatState extends State<MainChat> {
           child: Column(
             children: [
               Expanded(
-                // get all messages that are from void init state get_messages()
+                  // get all messages that are from void init state get_messages()
                   child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: messages.length,
-                    itemBuilder: (BuildContext listContext, int index) {
-                      return messages[index].sender == FriendUsername
-                          ? FriendBubble(message: messages[index].message!)
-                          : ChatBubble(message: messages[index].message!);
-                    },
-                  )
-              ),
+                controller: scrollController,
+                itemCount: messages.length,
+                itemBuilder: (BuildContext listContext, int index) {
+                  return messages[index].sender == FriendUsername
+                      ? FriendBubble(message: messages[index].message!)
+                      : ChatBubble(message: messages[index].message!);
+                },
+              )),
               Container(
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.all(10),
@@ -175,7 +184,6 @@ class _MainChatState extends State<MainChat> {
                         onPressed: () {
                           var text = messageController.text;
 
-
                           // add message to the list
                           var messageJson = {
                             "sender": myUsername,
@@ -191,11 +199,10 @@ class _MainChatState extends State<MainChat> {
                           messageController.clear();
 
                           /// send message to server
-                          if (text.isNotEmpty ) {
+                          if (text.isNotEmpty) {
                             _channel?.sink.add(jsonEncode(messageJson));
                             messageController.clear();
                           }
-
 
                           /// scroll to bottom of the list
                           Scroll_to_bottom(scrollController);
