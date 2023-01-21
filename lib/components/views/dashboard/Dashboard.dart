@@ -2,15 +2,15 @@ import 'dart:convert';
 
 import 'package:chat_app/components/views/chat/MainChat.dart';
 import 'package:chat_app/components/views/others/AddFriend_widget.dart';
+import 'package:chat_app/model/GetController.dart';
 import 'package:chat_app/model/GlobalStore.dart';
-import 'package:chat_app/model/Server/WebsocketService.dart';
 import 'package:flutter/material.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../model/FriendUser.dart';
+import '../../../model/Message.dart';
 import '../../../model/MongoDB/GetFriends.dart';
-import '../../../model/MongoDB/GetMessages.dart';
-import '../../../model/MongoDB/MongoDBService.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -20,23 +20,23 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  final GetController getController = Get.put(GetController());
   List<FriendUser> friends = [];
+
+  GlobalStore globalStore = GlobalStore.getInstance();
+
+
 
   @override
   void initState() {
     super.initState();
     print("dashboard init state was executed");
 
-    get_friends();
+    FetchFriends();
+
   }
 
-
-
-
-
-
-
-  void get_friends() async {
+  void FetchFriends() async {
     GetFriends getFriends = GetFriends();
     List<FriendUser> newList = [];
 
@@ -69,7 +69,7 @@ class _DashboardState extends State<Dashboard> {
         color: const Color(0xFF111827),
         child: RefreshIndicator(
           onRefresh: () async {
-            get_friends();
+            FetchFriends();
           },
           child: ListView(
               // backgroundColor: const Color(0xFF374151),
@@ -115,7 +115,7 @@ class UserFriend_widget extends StatelessWidget {
         globalStore.local_storage.setItem("FriendUsername", username);
 
         var route = MaterialPageRoute(
-          builder: (BuildContext context) => const MainChat(),
+          builder: (BuildContext context) => MainChat(),
         );
         Navigator.of(context).push(route);
       },
