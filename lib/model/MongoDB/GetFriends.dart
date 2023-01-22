@@ -5,7 +5,7 @@ import 'package:chat_app/model/MongoDB/Operations.dart';
 import 'package:http/http.dart' as http;
 import 'package:localstorage/localstorage.dart';
 
-import '../FriendUser.dart';
+import '../Classes/FriendUser.dart';
 
 class GetFriends implements Operation {
   // List<FriendUser> friends = [];

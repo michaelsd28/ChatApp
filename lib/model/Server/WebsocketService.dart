@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:chat_app/model/GlobalStore.dart';
-import 'package:chat_app/model/Message.dart';
+import 'package:chat_app/model/Classes/Message.dart';
 
 class WebSocketService {
   // connect to the server and listen for messages from the server and send messages to the server

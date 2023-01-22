@@ -2,12 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:chat_app/model/GlobalStore.dart';
-import 'package:chat_app/model/Message.dart';
+import 'package:chat_app/model/Classes/Message.dart';
 import 'package:chat_app/model/MongoDB/GetMessages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../model/GetController.dart';
 
@@ -31,15 +30,14 @@ class MainChat extends StatefulWidget {
 }
 
 class _MainChatState extends State<MainChat> {
-  final ScrollController scrollController = ScrollController(
-    keepScrollOffset: false,
-  );
+
 
   var messageController = TextEditingController();
 
   String? FriendUsername;
   String? myUsername;
   final GetController getController = Get.put(GetController());
+
   GlobalStore globalStore = GlobalStore.getInstance();
 
   @override
@@ -53,9 +51,9 @@ class _MainChatState extends State<MainChat> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       //write or call your logic
       //code will run when widget rendering complete
-      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+     getController. scrollController.jumpTo(getController.scrollController.position.maxScrollExtent);
     });
-   myUsername = globalStore.local_storage.getItem("MyUsername");
+    myUsername = globalStore.local_storage.getItem("MyUsername");
     FriendUsername = globalStore.local_storage.getItem('FriendUsername');
 
     get_messages();
@@ -71,16 +69,16 @@ class _MainChatState extends State<MainChat> {
       // rxList<Message> = newMessages List<Message>
       getController.setList(newMessages);
       // scroll to bottom of the list
-      Scroll_to_bottom(scrollController);
+      Scroll_to_bottom(getController.scrollController);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    scrollController.addListener(() {
+    getController. scrollController.addListener(() {
       // scroll to bottom when new message is added to the list and when chat is opened
 
-      print("scrollController called in MainChat ${scrollController.offset}");
+      print("scrollController called in MainChat ${getController.scrollController.offset}");
     });
 
     return Scaffold(
@@ -96,55 +94,19 @@ class _MainChatState extends State<MainChat> {
           color: const Color(0xFF111827),
           child: Column(
             children: [
-              Expanded(
+              Obx(
+                () => Expanded(
                   // get all messages that are from void init state get_messages()
-                  child: StreamBuilder(
-                    stream: getController.channel?.stream,
-                    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-
-                      // if received message from server then add it to the list
-                      if (snapshot.hasData ) {
-                        print("snapshot has data ${snapshot.data} and ${snapshot.data.runtimeType} and ${snapshot.data.toString()}");
-
-                        // convert json to message object
-                        Message message = Message.fromJson(jsonDecode(snapshot.data));
-                        // add message to the list
-                        print("myUsername != FriendUsername");
-
-
-
-                        getController.addToList(message);
-
-
-
-                        // scroll to bottom of the list
-                        Scroll_to_bottom(scrollController);
-
-
-                      }
-
-
-
-
-
-
-                      return ListView.builder(
-                        controller: scrollController,
-                        itemCount: getController.myMessages.length,
-                        itemBuilder: (BuildContext listContext, int index) {
-                          return getController.myMessages[index].sender == FriendUsername
-                              ? FriendBubble(message: getController.myMessages[index].message!)
-                              : ChatBubble(message: getController.myMessages[index].message!);
-                        },
-                      );
-
-
-
-
-
-                  },
-
+                  child: ListView.builder(
+                    controller: getController.scrollController,
+                    itemCount: getController.myMessages.length,
+                    itemBuilder: (BuildContext listContext, int index) {
+                      return getController.myMessages[index].sender == FriendUsername
+                          ? FriendBubble(message: getController.myMessages[index].message!)
+                          : ChatBubble(message: getController.myMessages[index].message!);
+                    },
                   ),
+                ),
               ),
               Container(
                 margin: const EdgeInsets.all(10),
@@ -187,9 +149,8 @@ class _MainChatState extends State<MainChat> {
                           };
                           Message message = Message.fromJson(messageJson);
                           setState(() {
-                            getController.addToList(message);
+                            getController.myMessages.add(message);
                           });
-
 
                           /// send message to server
                           if (text.isNotEmpty) {
@@ -198,9 +159,8 @@ class _MainChatState extends State<MainChat> {
                             messageController.clear();
                           }
 
-
                           /// scroll to bottom of the list
-                          Scroll_to_bottom(scrollController);
+                          Scroll_to_bottom(getController.scrollController);
                         },
                         icon: const Icon(
                           Icons.send,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../model/MongoDB/SignUp.dart';
 import '../../../model/MongoDB/MongoDBService.dart';
-import '../../../model/RegisterUser.dart';
+import '../../../model/Classes/RegisterUser.dart';
 
 class SignUp_widget extends StatefulWidget {
   const SignUp_widget({Key? key}) : super(key: key);

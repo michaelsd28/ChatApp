@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:chat_app/model/Message.dart';
+import 'package:chat_app/model/Classes/Message.dart';
 import 'package:chat_app/model/MongoDB/Operations.dart';
 import 'package:http/http.dart' as http;
 

@@ -3,7 +3,7 @@ import 'package:chat_app/model/GlobalStore.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:chat_app/model/RegisterUser.dart';
+import 'package:chat_app/model/Classes/RegisterUser.dart';
 // import mongodb dart driver
 
 // import to map

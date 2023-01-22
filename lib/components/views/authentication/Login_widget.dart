@@ -4,7 +4,7 @@ import 'package:chat_app/model/GlobalStore.dart';
 import 'package:chat_app/model/MongoDB/LoginUser.dart';
 import 'package:chat_app/model/MongoDB/MongoDBService.dart';
 import 'package:flutter/material.dart';
-import '../../../model/User.dart';
+import '../../../model/Classes/User.dart';
 
 class Login_widget extends StatelessWidget {
   const Login_widget({Key? key}) : super(key: key);

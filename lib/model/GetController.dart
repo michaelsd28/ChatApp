@@ -1,34 +1,19 @@
 import 'dart:convert';
 
 import 'package:chat_app/model/GlobalStore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'Message.dart';
+import 'Classes/Message.dart';
 
 class GetController extends GetxController {
-  var count = 0.obs;
-
-  void increment() => count++;
-
   final myMessages = <Message>[].obs;
 
-// add to list if timestamp is not in list
-  void addToList(Message item) {
-    bool isFound = false;
-    for (var i = 0; i < myMessages.length; i++) {
-      if (myMessages[i].timestamp == item.timestamp) {
-        isFound = true;
-      }
-    }
-    if (!isFound) {
-      myMessages.add(item);
-    }
-  }
 
-  void removeFromList(Message item) => myMessages.remove(item);
-
-  void updateList(int index, Message item) => myMessages[index] = item;
+   ScrollController scrollController = ScrollController(
+    keepScrollOffset: false,
+  );
 
   void setList(List<Message> newList) => myMessages.assignAll(newList);
 
@@ -50,10 +35,39 @@ class GetController extends GetxController {
       Uri.parse("ws://10.0.0.9:8080/chat-server"),
     );
 
-    GlobalStore store = GlobalStore.getInstance();
-    String token = store.local_storage.getItem("JWT_token");
-    String MyUsername = store.local_storage.getItem("MyUsername");
-    channel!.sink.add(jsonEncode({"username": MyUsername, "token": token}));
+    channel?.stream.listen((event) {
+      dynamic messageJson = jsonDecode(event);
+
+      var message = Message.fromJson(messageJson);
+
+      var myUsername = GlobalStore.getInstance().local_storage.getItem("MyUsername");
+
+      /// if the message is not from me
+      if (message.receiver == myUsername) {
+        myMessages.add(message);
+
+        /// scroll to bottom of the list
+
+
+
+        // scrollController is not working here because the list is not rendered yet
+        // so we need to use the post frame callback
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          scrollController.animateTo(
+            scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        });
+
+
+
+
+        /// update the list
+        update();
+      }
+    });
+
     super.onInit();
   }
 }

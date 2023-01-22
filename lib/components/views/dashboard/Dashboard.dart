@@ -6,10 +6,8 @@ import 'package:chat_app/model/GetController.dart';
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-import '../../../model/FriendUser.dart';
-import '../../../model/Message.dart';
+import '../../../model/Classes/FriendUser.dart';
 import '../../../model/MongoDB/GetFriends.dart';
 
 class Dashboard extends StatefulWidget {
@@ -25,8 +23,6 @@ class _DashboardState extends State<Dashboard> {
 
   GlobalStore globalStore = GlobalStore.getInstance();
 
-
-
   @override
   void initState() {
     super.initState();
@@ -34,6 +30,15 @@ class _DashboardState extends State<Dashboard> {
 
     FetchFriends();
 
+    handleSocketLogin();
+  }
+
+  void handleSocketLogin() {
+    GlobalStore store = GlobalStore.getInstance();
+    String token = store.local_storage.getItem("JWT_token");
+    String MyUsername = store.local_storage.getItem("MyUsername");
+
+    getController.channel!.sink.add(jsonEncode({"username": MyUsername, "token": token}));
   }
 
   void FetchFriends() async {
@@ -74,13 +79,15 @@ class _DashboardState extends State<Dashboard> {
           child: ListView(
               // backgroundColor: const Color(0xFF374151),
 
-              children: friends
-                  .map((friend) => UserFriend_widget(
-                        username: friend.username,
-                        lastMessage: "last message",
-                        image: friend.image,
-                      ))
-                  .toList()),
+              children: friends.isNotEmpty
+                  ? friends
+                      .map((friend) => UserFriend_widget(
+                            username: friend.username,
+                            lastMessage: "last message",
+                            image: friend.image,
+                          ))
+                      .toList()
+                  : [const Center(child: Text("No friends yet"))]),
         ),
       ),
     );
