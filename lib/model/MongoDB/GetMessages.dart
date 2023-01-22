@@ -25,7 +25,7 @@ class GetMessages   {
     var headers = {
       'Content-Type': 'application/json'
     };
-    var request = http.Request('POST', Uri.parse('http://10.0.0.9:8080/get-messages'));
+    var request = http.Request('POST', Uri.parse('http://10.0.0.174:8080/get-messages'));
 
 
 

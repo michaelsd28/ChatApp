@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:chat_app/model/MongoDB/Operations.dart';
 import 'package:http/http.dart' as http;
-import 'package:localstorage/localstorage.dart';
 
 import '../Classes/FriendUser.dart';
 
@@ -17,7 +16,7 @@ class GetFriends implements Operation {
 
     GlobalStore globalStore = GlobalStore.getInstance();
     String? token = globalStore.local_storage.getItem("JWT_token");
-    String requestUrl = "http://10.0.0.9:8080/get-friends/$token";
+    String requestUrl = "http://10.0.0.174:8080/get-friends/$token";
     var request = http.Request('GET', Uri.parse(requestUrl));
     var headers = {'Content-Type': 'application/json'};
 

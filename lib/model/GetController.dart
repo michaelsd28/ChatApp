@@ -32,7 +32,7 @@ class GetController extends GetxController {
   @override
   void onInit() {
     channel = WebSocketChannel.connect(
-      Uri.parse("ws://10.0.0.9:8080/chat-server"),
+      Uri.parse("ws://10.0.0.174:8080/chat-server"),
     );
 
     channel?.stream.listen((event) {
