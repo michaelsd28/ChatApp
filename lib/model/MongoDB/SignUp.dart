@@ -22,6 +22,8 @@ class SignUp implements Operation {
 
 
 
+  GlobalStore store = GlobalStore.getInstance();
+
   @override
   Future<void> execute() async {
 
@@ -29,20 +31,34 @@ class SignUp implements Operation {
 
 
     var headers = {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json' ,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, '
+          'Accept, Authorization'
     };
-    var request = http.Request('POST', Uri.parse('http://10.0.0.174:8080/register'));
+    var request = http.Request('POST', Uri.parse('http://10.0.0.9:8080/register'));
     request.body = user.toJson();
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
 
-    if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+    print("response is $response ");
+
+    // {"status":"success"}
+    // {"status":"fail"}
+
+    var json = await response.stream.bytesToString();
+    var jsonBody = jsonDecode(json);
+
+    print("jsonBody is $jsonBody");
+
+    if (jsonBody['status'] == 'success') {
+      store.local_storage.setItem("DidSignUp", "true");
+    } else if (jsonBody['status'] == 'fail') {
+      store.local_storage.setItem("DidSignUp", "false");
     }
-    else {
-      print(response.reasonPhrase);
-    }
+
 
 
 

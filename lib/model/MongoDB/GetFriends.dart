@@ -16,9 +16,10 @@ class GetFriends implements Operation {
 
     GlobalStore globalStore = GlobalStore.getInstance();
     String? token = globalStore.local_storage.getItem("JWT_token");
-    String requestUrl = "http://10.0.0.174:8080/get-friends/$token";
-    var request = http.Request('GET', Uri.parse(requestUrl));
-    var headers = {'Content-Type': 'application/json'};
+    String requestUrl = "http://10.0.0.9:8080/get-friends/$token";
+    var uri = Uri.parse(requestUrl);
+    var request = http.Request('GET', uri);
+    var headers = {'Content-Type': 'application/json' , 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE', 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'};
 
     request.headers.addAll(headers);
 

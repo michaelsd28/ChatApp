@@ -22,10 +22,8 @@ class GetMessages   {
     String FriendUserName = store.local_storage.getItem("FriendUsername");
 
 
-    var headers = {
-      'Content-Type': 'application/json'
-    };
-    var request = http.Request('POST', Uri.parse('http://10.0.0.174:8080/get-messages'));
+    var headers = {'Content-Type': 'application/json' , 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE', 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'};
+    var request = http.Request('POST', Uri.parse('http://10.0.0.9:8080/get-messages'));
 
 
 

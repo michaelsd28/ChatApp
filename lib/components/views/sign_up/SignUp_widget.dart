@@ -1,8 +1,11 @@
+import 'package:chat_app/model/GlobalStore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../model/MongoDB/SignUp.dart';
 import '../../../model/MongoDB/MongoDBService.dart';
 import '../../../model/Classes/RegisterUser.dart';
+import '../authentication/Login_widget.dart';
 
 class SignUp_widget extends StatefulWidget {
   const SignUp_widget({Key? key}) : super(key: key);
@@ -12,6 +15,7 @@ class SignUp_widget extends StatefulWidget {
 }
 
 class _SignUp_widgetState extends State<SignUp_widget> {
+
 
   var nameController = TextEditingController();
   var usernameController = TextEditingController();
@@ -42,6 +46,7 @@ class _SignUp_widgetState extends State<SignUp_widget> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+
                     const SizedBox(
                       height: 80,
                       child: Text(
@@ -113,6 +118,7 @@ class _SignUp_widgetState extends State<SignUp_widget> {
                               labelStyle: TextStyle(
                                 color: Colors.grey,
                               ),
+
                             ),
                           ),
                           // repeat password
@@ -176,10 +182,58 @@ class _SignUp_widgetState extends State<SignUp_widget> {
 
 
                                 SignUp insertUser = SignUp(user);
-                                MongoDBService mongoDBService =
-                                    MongoDBService(insertUser);
+                                MongoDBService mongoDBService =  MongoDBService(insertUser);
 
                                 await mongoDBService.execute();
+
+                                // pop up message to show that the user has been created
+                                GlobalStore   globalStore = GlobalStore.getInstance();
+                               String didSignUP = globalStore.local_storage.getItem("DidSignUp");
+
+
+                               if (didSignUP == "true") {
+                                 showDialog<String>(
+                                   context: context,
+                                   builder: (BuildContext context) => AlertDialog(
+                                     title: const Text('User created'),
+                                     content: const Text('User has been created'),
+                                     actions: <Widget>[
+                                       TextButton(
+                                         onPressed: () => {
+                                           Navigator.pop(context, 'OK'),
+
+
+                                           // pop sign up page
+                                            Navigator.pop(context, 'OK'),
+
+
+
+
+                                 },
+                                         child: const Text('OK'),
+                                       ),
+                                     ],
+                                   ),
+                                 );
+                               }
+                               else {
+                                 showDialog<String>(
+                                   context: context,
+                                   builder: (BuildContext context) => AlertDialog(
+                                     title: const Text('User not created'),
+                                     content: const Text('User has not been created'),
+                                     actions: <Widget>[
+                                       TextButton(
+                                         onPressed: () => Navigator.pop(context, 'OK'),
+                                         child: const Text('OK'),
+                                       ),
+                                     ],
+                                   ),
+                                 );
+                               }
+
+
+
                               },
                               child: const Text('Sign up'),
                             ),

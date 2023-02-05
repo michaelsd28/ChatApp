@@ -23,6 +23,8 @@ class _DashboardState extends State<Dashboard> {
 
   GlobalStore globalStore = GlobalStore.getInstance();
 
+  double peekSeeker = 0;
+
   @override
   void initState() {
     super.initState();
@@ -87,7 +89,16 @@ class _DashboardState extends State<Dashboard> {
                             image: friend.image,
                           ))
                       .toList()
-                  : [const Center(child: Text("No friends yet"))]),
+                  : [
+                      const Center(
+                          child: Text(
+                        "Add a friend",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                        ),
+                      )),
+                    ]),
         ),
       ),
     );
@@ -115,9 +126,10 @@ class UserFriend_widget extends StatelessWidget {
         radius: 25,
       ),
       // leading: Image.asset('assets/authentication/profile_pic.png'),
-      title: Text(username!, style: TextStyle(color: Colors.white)),
-      subtitle: Text(lastMessage!, style: TextStyle(color: Colors.white)),
+      title: Text(username!, style: const TextStyle(color: Colors.white)),
+      subtitle: Text(lastMessage!, style: const TextStyle(color: Colors.white)),
       onTap: () {
+        print("onTap: () ->  username: $username");
         GlobalStore globalStore = GlobalStore.getInstance();
         globalStore.local_storage.setItem("FriendUsername", username);
 

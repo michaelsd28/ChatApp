@@ -1,19 +1,32 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:chat_app/components/views/dashboard/Dashboard.dart';
 import 'package:chat_app/components/views/sign_up/SignUp_widget.dart';
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:chat_app/model/MongoDB/LoginUser.dart';
 import 'package:chat_app/model/MongoDB/MongoDBService.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../../model/Classes/User.dart';
+import '../../../model/GetController.dart';
 
-class Login_widget extends StatelessWidget {
+class Login_widget extends StatefulWidget {
   const Login_widget({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    var usernameController = TextEditingController();
-    var passwordController = TextEditingController();
+  State<Login_widget> createState() => _Login_widgetState();
+}
 
+class _Login_widgetState extends State<Login_widget> {
+  double peekSeeker = 0;
+  final player = AudioPlayer();
+  double duration =  1;
+  final GetController getController = Get.put(GetController());
+  var usernameController = TextEditingController();
+  var passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       // tailwind color palette dark mode
       // max width 400
@@ -44,8 +57,32 @@ class Login_widget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Text("Seeker: $peekSeeker"),
+                      Slider(
+                        value: peekSeeker,
+                        onChangeStart: (value) async {
+                          await player.pause();
+                          // get duration of the audio file and set it to the max value of the slider
+
+
+
+                        },
+                        onChanged: (value) {
+                          setState(() async {
+                            peekSeeker = value;
+
+                          });
+                        },
+                        onChangeEnd: (value) async {
+                          await player.seek(Duration(seconds: value.toInt()));
+                          await player.resume();
+                        },
+                        min: 0,
+                        max: duration.toDouble(),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
+                        // text needs to be white
                         child: TextField(
                           controller: usernameController,
                           style: const TextStyle(
@@ -95,6 +132,7 @@ class Login_widget extends StatelessWidget {
                           onPressed: () async {
                             String username = usernameController.text;
                             String password = passwordController.text;
+
                             _login(context, username, password);
                           },
                           child: const Text('Login'),
@@ -106,6 +144,63 @@ class Login_widget extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            Obx(
+                              () => Container(
+                                decoration: const BoxDecoration(),
+                                child: Center(
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: const Color(0xff0f0f0f),
+                                      foregroundColor: Colors.white,
+                                      minimumSize: const Size(50, 50),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+
+                                      player.onDurationChanged.listen((duration) {
+                                        setState(() {
+                                          this.duration = duration.inSeconds.toDouble();
+                                        });
+                                      });
+
+
+
+
+                                      player.onPlayerStateChanged.listen((state) {
+                                        if (state == PlayerState.completed) {
+                                          setState(() {
+                                            getController.isPlaying.value = false;
+                                          });
+                                        }
+                                      });
+
+                                      // player  set position to 5 seconds
+
+                                      player.onPositionChanged.listen((position) {
+                                        setState(() {
+                                          peekSeeker = position.inSeconds.toDouble();
+                                        });
+                                      });
+
+                                      if (getController.isPlaying.value == true) {
+                                        await player.stop();
+
+                                        getController.isPlaying.value = false;
+                                        return;
+                                      } else {
+                                        await player.play(DeviceFileSource("assets/chat/audio-sample2.mp3")); // will immediately start playing
+
+                                        getController.isPlaying.value = true;
+                                      }
+
+                                    },
+                                    child: getController.isPlaying.value == false ? const Text('▶️') : const Text('⏸️'),
+                                  ),
+                                ),
+                              ),
+                            ),
                             const Text(
                               'Or login with',
                               style: TextStyle(
@@ -180,7 +275,7 @@ class Login_widget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             const Text(
-                              'Don\'t have an account?',
+                              'Dont have an account?',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -189,8 +284,7 @@ class Login_widget extends StatelessWidget {
                               onPressed: () {
                                 // add code to navigate to the next screen (sign up)
                                 var route = MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      const SignUp_widget(),
+                                  builder: (BuildContext context) => const SignUp_widget(),
                                 );
                                 Navigator.of(context).push(route);
                               },
@@ -218,8 +312,6 @@ class Login_widget extends StatelessWidget {
   }
 
   void _login(BuildContext context, String username, String password) async {
-
-
     GlobalStore globalStore = GlobalStore.getInstance();
     globalStore.local_storage.setItem("MyUsername", username);
 
@@ -244,10 +336,9 @@ class Login_widget extends StatelessWidget {
       // show snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Invalid username or password'),
+          content: Text('Credenciales incorrectas'),
         ),
       );
-
     }
   }
 }

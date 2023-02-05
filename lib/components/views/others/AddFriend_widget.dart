@@ -61,7 +61,54 @@ class Add_friend extends StatelessWidget {
                 var username = usernameController.text;
                 var name = nameController.text;
 
-                await insertUser(username, name, context);
+                print("username: $username name: $name");
+
+                AddFriend_Service addFriend = AddFriend_Service(name=name, username =username);
+                MongoDBService mongoDBService = MongoDBService(addFriend);
+                await mongoDBService.execute();
+
+                GlobalStore globalStore = GlobalStore.getInstance();
+                String isFriendAdded = globalStore.local_storage.getItem("isFriendAdded");
+                // pop up message to show that the user has been created with alert dialog
+
+                print("isFriendAdded: $isFriendAdded");
+
+               if (isFriendAdded == "false" ) {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Friend not added'),
+                      content: const Text('Friend not added'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Friend added'),
+                      content: const Text('Friend added'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+               }
+
+
+
+
+
+
+
               },
               child: const Text('Add'),
             ),
@@ -71,30 +118,5 @@ class Add_friend extends StatelessWidget {
     );
   }
 
-  insertUser(String username, String name, BuildContext context) async {
-    AddFriend_widget addFriend = AddFriend_widget(name, username);
-    MongoDBService mongoDBService = MongoDBService(addFriend);
-    await mongoDBService.execute();
 
-    GlobalStore globalStore = GlobalStore.getInstance();
-
-    var isInserted = globalStore.local_storage.getItem("isInserted");
-
-    // snackbar to show if the user is added or not
-    if (isInserted == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('User added'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('User not added'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
 }

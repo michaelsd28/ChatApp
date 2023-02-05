@@ -16,8 +16,12 @@ class LoginUser implements Operation {
 
   @override
   Future<void> execute() async {
-    var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST', Uri.parse('http://10.0.0.174:8080/login'));
+    /* add and accept cors */
+    var headers = {'Content-Type': 'application/json' , 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE', 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'};
+    // var request = http.Request('POST', Uri.parse('http://10.0.0.174:8080/login'));
+    var requestUrl = "http://10.0.0.9:8080/login";
+    var uri = Uri.parse(requestUrl);
+    var request = http.Request('POST', uri);
     request.body = json.encode({"username": user.username, "password": user.password});
     request.headers.addAll(headers);
 

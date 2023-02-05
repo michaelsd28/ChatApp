@@ -75,6 +75,7 @@ class _MainChatState extends State<MainChat> {
 
   @override
   Widget build(BuildContext context) {
+
     getController. scrollController.addListener(() {
       // scroll to bottom when new message is added to the list and when chat is opened
 
@@ -138,6 +139,8 @@ class _MainChatState extends State<MainChat> {
                       child: IconButton(
                         onPressed: () {
                           var text = messageController.text;
+                          print("📲 onPressed send message::: $text");
+
 
                           // add message to the list
                           var messageJson = {
@@ -148,14 +151,17 @@ class _MainChatState extends State<MainChat> {
                             "type": "text"
                           };
                           Message message = Message.fromJson(messageJson);
-                          setState(() {
-                            getController.myMessages.add(message);
-                          });
+
+
+
 
                           /// send message to server
                           if (text.isNotEmpty) {
                             print("message is not empty $messageJson");
                             getController.sendMessage(jsonEncode(messageJson));
+                            setState(() {
+                              getController.myMessages.add(message);
+                            });
                             messageController.clear();
                           }
 

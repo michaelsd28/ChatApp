@@ -18,7 +18,7 @@ class GlobalStore {
 
    WebSocketChannel? GetChannel() {
 // channel with broadcast to listen to the same channel from different places
-    String connectionString = "ws://10.0.0.174:8080/chat-server";
+    String connectionString = "ws://10.0.0.9:8080/chat-server";
 
     _channel ??= WebSocketChannel.connect(
       Uri.parse(connectionString),

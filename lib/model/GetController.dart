@@ -10,8 +10,11 @@ import 'Classes/Message.dart';
 class GetController extends GetxController {
   final myMessages = <Message>[].obs;
 
+  var isPlaying = false.obs;
 
-   ScrollController scrollController = ScrollController(
+  var  playerSeeker = 0.0;
+
+  ScrollController scrollController = ScrollController(
     keepScrollOffset: false,
   );
 
@@ -32,23 +35,24 @@ class GetController extends GetxController {
   @override
   void onInit() {
     channel = WebSocketChannel.connect(
-      Uri.parse("ws://10.0.0.174:8080/chat-server"),
+      Uri.parse("ws://10.0.0.9:8080/chat-server"),
     );
 
     channel?.stream.listen((event) {
       dynamic messageJson = jsonDecode(event);
 
+      print("channel?.stream.lis **** messageJson:: $messageJson");
+
       var message = Message.fromJson(messageJson);
 
       var myUsername = GlobalStore.getInstance().local_storage.getItem("MyUsername");
+      var FriendUsername = GlobalStore.getInstance().local_storage.getItem("FriendUsername");
 
       /// if the message is not from me
       if (message.receiver == myUsername) {
         myMessages.add(message);
 
         /// scroll to bottom of the list
-
-
 
         // scrollController is not working here because the list is not rendered yet
         // so we need to use the post frame callback
@@ -59,9 +63,6 @@ class GetController extends GetxController {
             curve: Curves.easeOut,
           );
         });
-
-
-
 
         /// update the list
         update();
