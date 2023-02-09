@@ -22,77 +22,110 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   double position = 0;
   final GetController getController = Get.put(GetController());
 
+
+  @override
+  void initState()  {
+    super.initState();
+
+    var audioID = widget.audioID;
+    var source = DeviceFileSource('http://localhost:8080/get-file/$audioID');
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+
+     await player.play(source);
+     await player.stop();
+
+
+    });
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     // responsive container
 
-    return Row(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            IconButton(
-              color: Colors.blueGrey,
-              onPressed: () async {
-                if (isPlaying) {
-                  await player.pause();
+
+
+    // size cannot be less than 300
+    var width = MediaQuery.of(context).size.width *0.6;
+
+
+
+
+
+    return SizedBox(
+
+      width:  width < 300 ? 300 : width,
+
+      child: Row(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                color: Colors.blueGrey,
+                onPressed: () async {
+                  if (isPlaying) {
+                    await player.pause();
+                    setState(() {
+                      isPlaying = false;
+                    });
+                  } else {
+
+                    String audioID = widget.audioID;
+                    print("audioID:: $audioID");
+                    var source = DeviceFileSource('http://localhost:8080/get-file/$audioID');
+                    await player.play(source);
+
+                    /// set the position of the audio file
+                    player.onPositionChanged.listen((event) {
+                      setState(() {
+                        position = event.inSeconds.toDouble();
+                      });
+                    });
+
+                    /// Get the duration of the audio file
+                    player.onDurationChanged.listen((duration) {
+                      setState(() {
+                        this.duration = duration.inSeconds.toDouble();
+                      });
+                    });
+                    setState(() {
+                      isPlaying = true;
+                    });
+                  }
+                },
+                icon: isPlaying ? const Icon(Icons.pause) : const Icon(Icons.play_arrow),
+              ),
+              IconButton(
+                color: Colors.deepOrangeAccent,
+                onPressed: () async {
+                  await player.stop();
                   setState(() {
                     isPlaying = false;
                   });
-                } else {
+                },
+                icon: const Icon(Icons.stop),
+              ),
+            ],
+          ),
+          Slider(
 
-                  String audioID = widget.audioID;
-                  print("audioID:: $audioID");
-                  var source = DeviceFileSource('http://localhost:8080/get-file/$audioID');
-                  await player.play(source);
-
-                  /// set the position of the audio file
-                  player.onPositionChanged.listen((event) {
-                    setState(() {
-                      position = event.inSeconds.toDouble();
-                    });
-                  });
-
-                  /// Get the duration of the audio file
-                  player.onDurationChanged.listen((duration) {
-                    setState(() {
-                      this.duration = duration.inSeconds.toDouble();
-                    });
-                  });
-                  setState(() {
-                    isPlaying = true;
-                  });
-                }
-              },
-              icon: isPlaying ? const Icon(Icons.pause) : const Icon(Icons.play_arrow),
-            ),
-            IconButton(
-              color: Colors.deepOrangeAccent,
-              onPressed: () async {
-                await player.stop();
-                setState(() {
-                  isPlaying = false;
-                });
-              },
-              icon: const Icon(Icons.stop),
-            ),
-          ],
-        ),
-        Slider(
-          // value: getController.seeker.value,
-          // slider color
-          activeColor: Colors.white,
-          value: position,
-          min: 0,
-          max: duration,
-          onChanged: (value) async {
-            setState(() async {
-              position = value;
-              await player.seek(Duration(seconds: value.toInt()));
-            });
-          },
-        ),
-      ],
+            // value: getController.seeker.value,
+            // slider color
+            activeColor: Colors.white,
+            value: position,
+            min: 0,
+            max: duration,
+            onChanged: (value) async {
+              setState(() async {
+                position = value;
+                await player.seek(Duration(seconds: value.toInt()));
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 }
