@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:chat_app/components/views/chat/AudioPlayerWidget.dart';
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:chat_app/model/Classes/Message.dart';
 import 'package:chat_app/model/MongoDB/GetMessages.dart';
@@ -21,7 +22,7 @@ void Scroll_to_bottom(ScrollController scrollController) {
 }
 
 class MainChat extends StatefulWidget {
-  MainChat({
+  const MainChat({
     Key? key,
   }) : super(key: key);
 
@@ -30,8 +31,6 @@ class MainChat extends StatefulWidget {
 }
 
 class _MainChatState extends State<MainChat> {
-
-
   var messageController = TextEditingController();
 
   String? FriendUsername;
@@ -51,7 +50,7 @@ class _MainChatState extends State<MainChat> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       //write or call your logic
       //code will run when widget rendering complete
-     getController. scrollController.jumpTo(getController.scrollController.position.maxScrollExtent);
+      getController.scrollController.jumpTo(getController.scrollController.position.maxScrollExtent);
     });
     myUsername = globalStore.local_storage.getItem("MyUsername");
     FriendUsername = globalStore.local_storage.getItem('FriendUsername');
@@ -75,8 +74,7 @@ class _MainChatState extends State<MainChat> {
 
   @override
   Widget build(BuildContext context) {
-
-    getController. scrollController.addListener(() {
+    getController.scrollController.addListener(() {
       // scroll to bottom when new message is added to the list and when chat is opened
 
       print("scrollController called in MainChat ${getController.scrollController.offset}");
@@ -102,9 +100,16 @@ class _MainChatState extends State<MainChat> {
                     controller: getController.scrollController,
                     itemCount: getController.myMessages.length,
                     itemBuilder: (BuildContext listContext, int index) {
-                      return getController.myMessages[index].sender == FriendUsername
-                          ? FriendBubble(message: getController.myMessages[index].message!)
-                          : ChatBubble(message: getController.myMessages[index].message!);
+                      bool isFriend = getController.myMessages[index].sender == FriendUsername;
+                      String type = getController.myMessages[index].type!;
+                      String message = getController.myMessages[index].message!;
+                      Widget childWidget = getWidgetMessage(type, message);
+
+                      return ChatMessageBubble(
+                        message: message,
+                        isFriend: isFriend,
+                        childWidget: childWidget,
+                      );
                     },
                   ),
                 ),
@@ -141,7 +146,6 @@ class _MainChatState extends State<MainChat> {
                           var text = messageController.text;
                           print("📲 onPressed send message::: $text");
 
-
                           // add message to the list
                           var messageJson = {
                             "sender": myUsername,
@@ -151,9 +155,6 @@ class _MainChatState extends State<MainChat> {
                             "type": "text"
                           };
                           Message message = Message.fromJson(messageJson);
-
-
-
 
                           /// send message to server
                           if (text.isNotEmpty) {
@@ -184,16 +185,22 @@ class _MainChatState extends State<MainChat> {
   }
 }
 
-class ChatBubble extends StatefulWidget {
+class ChatMessageBubble extends StatefulWidget {
   String? message;
+  bool? isFriend;
 
-  ChatBubble({Key? key, required this.message}) : super(key: key);
+  // widget variable and add it to the constructor
+  Widget childWidget = Container(
+    child: Text("placeholder"),
+  );
+
+  ChatMessageBubble({Key? key, required this.message, required this.isFriend, required this.childWidget}) : super(key: key);
 
   @override
-  State<ChatBubble> createState() => _ChatBubbleState();
+  State<ChatMessageBubble> createState() => _ChatMessageBubbleState();
 }
 
-class _ChatBubbleState extends State<ChatBubble> {
+class _ChatMessageBubbleState extends State<ChatMessageBubble> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -203,61 +210,14 @@ class _ChatBubbleState extends State<ChatBubble> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Stack(
-        alignment: Alignment.centerRight,
+        alignment: widget.isFriend == true ? Alignment.centerRight : Alignment.centerLeft,
         children: [
           Container(
             // rounded corners
-            decoration: const BoxDecoration(
-              color: Colors.lightBlueAccent,
-              // border radius for the whole container except bottom right
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
-                bottomLeft: Radius.circular(10),
-              ),
-            ),
-            padding: const EdgeInsets.all(10),
-
-            // add  index to text
-
-            child: Text(
-              widget.message!,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class FriendBubble extends StatefulWidget {
-  String? message;
-
-  FriendBubble({Key? key, required this.message}) : super(key: key);
-
-  @override
-  State<FriendBubble> createState() => _FriendBubbleState();
-}
-
-class _FriendBubbleState extends State<FriendBubble> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Stack(
-        alignment: Alignment.centerLeft,
-        children: [
-          Container(
-            // rounded corners
-            decoration: const BoxDecoration(
-                color: Colors.lightGreenAccent,
+            decoration: BoxDecoration(
+                color: widget.isFriend == true ? Colors.lightGreenAccent : Colors.lightBlueAccent,
                 // border radius for the whole container except bottom right
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomRight: Radius.circular(10),
                   topRight: Radius.circular(10),
                   bottomLeft: Radius.circular(10),
@@ -266,13 +226,35 @@ class _FriendBubbleState extends State<FriendBubble> {
 
             // add  index to text
 
-            child: Text(
-              widget.message!,
-              style: const TextStyle(fontSize: 16),
-            ),
+            // child widget
+            child: widget.childWidget,
           ),
         ],
       ),
     );
   }
+}
+
+// function to check the message type  and return the widget
+Widget getWidgetMessage(String type, String message) {
+  Widget childWidget = Container();
+
+  if (type == "text") {
+    childWidget = Text(
+      message,
+      style: const TextStyle(color: Colors.black87, fontFamily: "Arial Black", fontSize: 16),
+    );
+  } else if (type == "image") {
+    childWidget = Image.network(message);
+  } else if (type == "file") {
+    childWidget = Text(
+      message,
+      style: const TextStyle(color: Colors.black12),
+    );
+  } else if (type == "audio") {
+    childWidget = AudioPlayerWidget(
+      audioID: message,
+    );
+  }
+  return childWidget;
 }

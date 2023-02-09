@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:chat_app/components/views/chat/AudioPlayerWidget.dart';
 import 'package:chat_app/components/views/dashboard/Dashboard.dart';
 import 'package:chat_app/components/views/sign_up/SignUp_widget.dart';
 import 'package:chat_app/model/GlobalStore.dart';
@@ -18,10 +19,6 @@ class Login_widget extends StatefulWidget {
 }
 
 class _Login_widgetState extends State<Login_widget> {
-  double peekSeeker = 0;
-  final player = AudioPlayer();
-  double duration =  1;
-  final GetController getController = Get.put(GetController());
   var usernameController = TextEditingController();
   var passwordController = TextEditingController();
 
@@ -41,6 +38,7 @@ class _Login_widgetState extends State<Login_widget> {
               // spaceEvenly centers the text vertically
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+
                 const SizedBox(
                   height: 80,
                   child: Text(
@@ -57,29 +55,6 @@ class _Login_widgetState extends State<Login_widget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text("Seeker: $peekSeeker"),
-                      Slider(
-                        value: peekSeeker,
-                        onChangeStart: (value) async {
-                          await player.pause();
-                          // get duration of the audio file and set it to the max value of the slider
-
-
-
-                        },
-                        onChanged: (value) {
-                          setState(() async {
-                            peekSeeker = value;
-
-                          });
-                        },
-                        onChangeEnd: (value) async {
-                          await player.seek(Duration(seconds: value.toInt()));
-                          await player.resume();
-                        },
-                        min: 0,
-                        max: duration.toDouble(),
-                      ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
                         // text needs to be white
@@ -144,63 +119,6 @@ class _Login_widgetState extends State<Login_widget> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Obx(
-                              () => Container(
-                                decoration: const BoxDecoration(),
-                                child: Center(
-                                  child: TextButton(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: const Color(0xff0f0f0f),
-                                      foregroundColor: Colors.white,
-                                      minimumSize: const Size(50, 50),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    onPressed: () async {
-
-                                      player.onDurationChanged.listen((duration) {
-                                        setState(() {
-                                          this.duration = duration.inSeconds.toDouble();
-                                        });
-                                      });
-
-
-
-
-                                      player.onPlayerStateChanged.listen((state) {
-                                        if (state == PlayerState.completed) {
-                                          setState(() {
-                                            getController.isPlaying.value = false;
-                                          });
-                                        }
-                                      });
-
-                                      // player  set position to 5 seconds
-
-                                      player.onPositionChanged.listen((position) {
-                                        setState(() {
-                                          peekSeeker = position.inSeconds.toDouble();
-                                        });
-                                      });
-
-                                      if (getController.isPlaying.value == true) {
-                                        await player.stop();
-
-                                        getController.isPlaying.value = false;
-                                        return;
-                                      } else {
-                                        await player.play(DeviceFileSource("assets/chat/audio-sample2.mp3")); // will immediately start playing
-
-                                        getController.isPlaying.value = true;
-                                      }
-
-                                    },
-                                    child: getController.isPlaying.value == false ? const Text('▶️') : const Text('⏸️'),
-                                  ),
-                                ),
-                              ),
-                            ),
                             const Text(
                               'Or login with',
                               style: TextStyle(
@@ -336,7 +254,7 @@ class _Login_widgetState extends State<Login_widget> {
       // show snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Credenciales incorrectas'),
+          content: Text('Invalid credentials'),
         ),
       );
     }
