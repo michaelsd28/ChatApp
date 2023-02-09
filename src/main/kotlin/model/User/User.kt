@@ -15,6 +15,12 @@ class User {
     var friends: ArrayList<FriendUser> = ArrayList()
 
 
+    /*create sql table*/
+    fun createTable(): String {
+        return "CREATE TABLE IF NOT EXISTS Users (name VARCHAR(255), username VARCHAR(255), password VARCHAR(255), image VARCHAR(255), friends VARCHAR(255))"
+    }
+
+
     fun register(registerUser: RegisterUser): User {
         name = registerUser.name
         username = registerUser.username

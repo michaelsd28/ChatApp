@@ -7,7 +7,6 @@ import com.google.gson.Gson
 import io.ktor.server.plugins.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
-import model.Request.Req_insert_message
 import model.Request.WebSocketLogin
 import model.User.Message
 
@@ -16,11 +15,12 @@ class WebsocketService {
         suspend fun HandleIncomming(text: Frame.Text, defaultWebSocketServerSession: DefaultWebSocketServerSession) {
 
 
-            var session = defaultWebSocketServerSession
-            var message = text.readText()
-            var messageObj = Message.fromString(message)
 
-            var sessions = GlobalStore._sessions
+
+            val message = text.readText()
+            val messageObj = Message.fromString(message)
+
+            val sessions = GlobalStore._sessions
 
 
 
@@ -32,6 +32,7 @@ class WebsocketService {
 
                         sessions.forEach { (key, connectedUser) ->
                             if ((key != messageObj.sender) && (key == messageObj.receiver)) {
+                                println("send message to $key from ${messageObj.sender} ")
                                 sendAndSaveMessage(messageObj, connectedUser)
                             }
 
@@ -39,19 +40,23 @@ class WebsocketService {
                     }
 
                     "audio" -> {
-                        session.send("friend added")
+                        defaultWebSocketServerSession.send("friend added")
                     }
 
                     "image" -> {
-                        session.send("friends received")
+                        defaultWebSocketServerSession.send("friends received")
                     }
 
                     else -> {
-                        session.send("unknown message type")
+                        println("unknown message type 🚫")
+//                        session.send("unknown message type")
                     }
                 }
             } else {
-                session.send("invalid message")
+
+
+//                session.send("invalid message")
+                println("invalid message 🚫")
             }
 
 
@@ -59,16 +64,18 @@ class WebsocketService {
 
         private suspend fun sendAndSaveMessage(messageObj: Message, connectedUser: DefaultWebSocketServerSession) {
 
-            var message = Gson().toJson(messageObj)
-            var InsertMessage = InsertMessage(messageObj)
-            var mongoDBService = MongoDBService(InsertMessage)
-            var messages = mongoDBService.execute()
+            val message = Gson().toJson(messageObj)
+            // insert message to db
+            val insertMessage = InsertMessage(messageObj)
+            val mongoDBService = MongoDBService(insertMessage)
+//            mongoDBService.execute()
+
             connectedUser.send(message)
 
         }
 
 
-        suspend fun HandleNewUser(message: Frame.Text, session: DefaultWebSocketServerSession) {
+        fun HandleNewUser(message: Frame.Text, session: DefaultWebSocketServerSession) {
 
             println("new user connected session.call.request.origin.remoteHost:: ${session.call.request.origin.remoteHost} session.call.request.origin.remotePort:: ${session.call.request.origin.remotePort} message:: $message")
 
@@ -77,21 +84,22 @@ class WebsocketService {
 
             var webSocketLogin: WebSocketLogin = WebSocketLogin.fromString(message)
             var sessionStore = GlobalStore._sessions
-            var userName:String = webSocketLogin.username
+            var userName: String = webSocketLogin.username
 
             var isUserAlreadyLoggedIn = sessionStore.containsKey(userName)
 
             if (!isUserAlreadyLoggedIn) {
-                if (userName == ""){
-                    println("username is blank")
-                    session.send("username is blank")
+                if (userName == "") {
+                    println("username is blank or null")
+
                     return
                 }
                 println("new user added:: $userName")
-                session.send("user logged in")
+//                session.send("user logged in")
                 sessionStore[userName] = session
 
             } else {
+                sessionStore[userName] = session
                 println("user already logged in:: $userName")
                 return
             }

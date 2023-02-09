@@ -4,11 +4,13 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.gridfs.GridFSBuckets
 import io.ktor.server.websocket.*
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries.fromProviders
 import org.bson.codecs.configuration.CodecRegistries.fromRegistries
 import org.bson.codecs.pojo.PojoCodecProvider
+import java.io.File
 
 // singleton
 object GlobalStore {
@@ -28,6 +30,16 @@ object GlobalStore {
         _data["database"] = database
         _data["mongoClient"] = mongoClient
         return this
+    }
+
+    fun mongoDbGridFS(): ByteArray{
+        // get file from database
+        var file = File("")
+        val bucket = GridFSBuckets.create(database, "files")
+        val downloadStream = bucket.openDownloadStream("fileId")
+
+        return downloadStream.readBytes()
+
     }
 
 

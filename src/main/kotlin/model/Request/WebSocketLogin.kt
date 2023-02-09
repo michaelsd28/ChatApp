@@ -11,8 +11,8 @@ class WebSocketLogin {
 
             return try {
                 var webSocketLogin = WebSocketLogin()
-                var gson = Gson()
-                var classType = WebSocketLogin::class.java
+                val gson = Gson()
+                val classType = WebSocketLogin::class.java
                 webSocketLogin = gson.fromJson(message, classType)
                 webSocketLogin
 

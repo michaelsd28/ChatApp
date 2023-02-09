@@ -1,4 +1,4 @@
-package routes
+package routes.UserHandler
 
 import Services.MongoDB.InsertUser
 import Services.MongoDB.MongoDBService

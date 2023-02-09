@@ -1,4 +1,4 @@
-package routes
+package routes.UserHandler
 
 import Services.MongoDB.GetMessages
 import Services.MongoDB.InsertMessage

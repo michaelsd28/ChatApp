@@ -12,6 +12,15 @@ class Message() {
     var timestamp: String = ""
     var type: String = ""
 
+    /*
+
+    create sql table
+    CREATE TABLE IF NOT EXISTS Messages (sender VARCHAR(255), receiver VARCHAR(255), message VARCHAR(255), timestamp VARCHAR(255), type VARCHAR(255))
+
+
+
+   */
+
 
     /* json format
     {
@@ -25,7 +34,7 @@ class Message() {
 
 
     fun fromRequest(reqAddMessage: Req_insert_message): Message {
-        var message = Message()
+        val message = Message()
         message.sender = reqAddMessage.sender
         message.receiver = reqAddMessage.receiver
         message.message = reqAddMessage.message
@@ -41,10 +50,10 @@ class Message() {
         fun fromString(message: String): Message? {
 
 
-            var gson = Gson()
-            var classType = Message::class.java
+            val gson = Gson()
+            val classType = Message::class.java
 
-            var messageObj: Message?
+            val messageObj: Message?
 
             return try {
                 messageObj = gson.fromJson(message, classType)

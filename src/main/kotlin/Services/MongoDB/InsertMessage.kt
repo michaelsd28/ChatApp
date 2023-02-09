@@ -8,8 +8,7 @@ import model.Request.Req_insert_message
 import model.User.Message
 import org.bson.Document
 
-class InsertMessage(private val messageObject: Message) :Operation {
-
+class InsertMessage(private val messageObject: Message) : Operation {
 
 
     override fun execute(): Boolean {
@@ -18,18 +17,8 @@ class InsertMessage(private val messageObject: Message) :Operation {
         val collection = globalStore.GetCollection("Users")
 
 
-
-
         var sender = messageObject.sender
         var receiver = messageObject.receiver
-
-
-
-
-
-
-
-
 
 
         var user = collection.find(Document("username", sender)).first()
@@ -41,7 +30,6 @@ class InsertMessage(private val messageObject: Message) :Operation {
         collection.updateOne(user, updateUser, updateOptions)
 
 
-
         // add message to receiver
         var friend = collection.find(Document("username", receiver)).first()
         var updateFriend = Document("\$push", Document("friends.\$[elem].messages", message_doc))
@@ -50,25 +38,7 @@ class InsertMessage(private val messageObject: Message) :Operation {
         collection.updateOne(friend, updateFriend, updateFriendOptions)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return true
-
-
-
 
 
     }

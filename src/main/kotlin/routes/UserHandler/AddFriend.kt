@@ -1,16 +1,13 @@
-package routes
+package routes.UserHandler
 
 import Services.Authentication.JWTServices
 import Services.MongoDB.AddFriend
-import Services.MongoDB.InsertUser
 import Services.MongoDB.MongoDBService
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import model.FriendUser
 import model.Request.Req_add_friend
-import org.bson.Document
 
 
 fun Application.AddFriend() {
@@ -18,6 +15,8 @@ fun Application.AddFriend() {
     // AddFriend route
     routing {
         post("/add-friend") {
+
+            println("AddFriend route called ")
 
             // get AddFriend
             val newFriend = call.receive<Req_add_friend>()

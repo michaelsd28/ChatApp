@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.com.intellij.openapi.vfs.StandardFileSystems.jar
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -9,6 +11,7 @@ plugins {
 
 group = "com.example"
 version = "0.0.1"
+
 application {
     mainClass.set("com.example.ApplicationKt")
 
@@ -16,9 +19,20 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = application.mainClass.get()
+    }
+}
+
+
 repositories {
     mavenCentral()
 }
+
+//// railway listen to $PORT
+
+
 
 dependencies {
 

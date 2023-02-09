@@ -13,10 +13,13 @@ class FriendUser {
         "messages ": []
     }*/
 
+
+
     var name: String = ""
     var username: String = ""
     var image: String = ""
     var  messages:List<Message> =  ArrayList();
+
 
 
 
