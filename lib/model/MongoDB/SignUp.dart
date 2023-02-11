@@ -54,9 +54,9 @@ class SignUp implements Operation {
     print("jsonBody is $jsonBody");
 
     if (jsonBody['status'] == 'success') {
-      store.local_storage.setItem("DidSignUp", "true");
+      // store.local_storage.setItem("DidSignUp", "true");
     } else if (jsonBody['status'] == 'fail') {
-      store.local_storage.setItem("DidSignUp", "false");
+      // store.local_storage.setItem("DidSignUp", "false");
     }
 
 

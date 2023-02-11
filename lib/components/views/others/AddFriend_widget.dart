@@ -68,7 +68,8 @@ class Add_friend extends StatelessWidget {
                 await mongoDBService.execute();
 
                 GlobalStore globalStore = GlobalStore.getInstance();
-                String isFriendAdded = globalStore.local_storage.getItem("isFriendAdded");
+                // String isFriendAdded = globalStore.local_storage.getItem("isFriendAdded");
+                String isFriendAdded = "false";
                 // pop up message to show that the user has been created with alert dialog
 
                 print("isFriendAdded: $isFriendAdded");

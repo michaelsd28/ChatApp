@@ -4,7 +4,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class GlobalStore {
-  LocalStorage local_storage = LocalStorage('GlobalStore_local');
+  // LocalStorage local_storage = LocalStorage('GlobalStore_local');
 
   // public store to store data in the global store type Map<String, Object>
   Map<String, Object> storeMap = {};

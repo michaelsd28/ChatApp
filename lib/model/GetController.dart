@@ -9,10 +9,10 @@ import 'Classes/Message.dart';
 
 class GetController extends GetxController {
   final myMessages = <Message>[].obs;
-
-  var isPlaying = false.obs;
-
-  var  playerSeeker = 0.0;
+  String myUsername = "";
+  String FriendUsername = "";
+  String jwtToken = "";
+  String currentAudioID = "";
 
   ScrollController scrollController = ScrollController(
     keepScrollOffset: false,
@@ -45,9 +45,6 @@ class GetController extends GetxController {
 
       var message = Message.fromJson(messageJson);
 
-      var myUsername = GlobalStore.getInstance().local_storage.getItem("MyUsername");
-      var FriendUsername = GlobalStore.getInstance().local_storage.getItem("FriendUsername");
-
       /// if the message is not from me
       if (message.receiver == myUsername) {
         myMessages.add(message);
@@ -56,7 +53,7 @@ class GetController extends GetxController {
 
         // scrollController is not working here because the list is not rendered yet
         // so we need to use the post frame callback
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           scrollController.animateTo(
             scrollController.position.maxScrollExtent,
             duration: const Duration(milliseconds: 300),

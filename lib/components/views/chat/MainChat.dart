@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:chat_app/components/views/chat/AudioPlayerWidget.dart';
+import 'package:chat_app/components/views/chat/AudioRecorderWidget.dart';
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:chat_app/model/Classes/Message.dart';
 import 'package:chat_app/model/MongoDB/GetMessages.dart';
@@ -52,8 +53,8 @@ class _MainChatState extends State<MainChat> {
       //code will run when widget rendering complete
       getController.scrollController.jumpTo(getController.scrollController.position.maxScrollExtent);
     });
-    myUsername = globalStore.local_storage.getItem("MyUsername");
-    FriendUsername = globalStore.local_storage.getItem('FriendUsername');
+    myUsername = getController.myUsername;
+    FriendUsername = getController.FriendUsername;
 
     get_messages();
   }
@@ -67,6 +68,8 @@ class _MainChatState extends State<MainChat> {
     setState(() {
       // rxList<Message> = newMessages List<Message>
       getController.setList(newMessages);
+
+      print("getController.myMessages.length ${getController.myMessages.length}");
       // scroll to bottom of the list
       Scroll_to_bottom(getController.scrollController);
     });
@@ -124,7 +127,9 @@ class _MainChatState extends State<MainChat> {
                 child: Row(
                   children: [
                     Expanded(
+                      flex: 4,
                       child: TextField(
+
                         controller: messageController,
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
@@ -134,48 +139,65 @@ class _MainChatState extends State<MainChat> {
                         ),
                       ),
                     ),
-                    Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF374151),
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          var text = messageController.text;
-                          print("📲 onPressed send message::: $text");
+                    // recording button
+                    Expanded(
+                      flex: 1,
+                      child: Container(
 
-                          // add message to the list
-                          var messageJson = {
-                            "sender": myUsername,
-                            "receiver": FriendUsername,
-                            "message": text,
-                            "timestamp": DateTime.now().toString(),
-                            "type": "text"
-                          };
-                          Message message = Message.fromJson(messageJson);
 
-                          /// send message to server
-                          if (text.isNotEmpty) {
-                            print("message is not empty $messageJson");
-                            getController.sendMessage(jsonEncode(messageJson));
-                            setState(() {
-                              getController.myMessages.add(message);
-                            });
-                            messageController.clear();
-                          }
 
-                          /// scroll to bottom of the list
-                          Scroll_to_bottom(getController.scrollController);
-                        },
-                        icon: const Icon(
-                          Icons.send,
-                          color: Colors.white,
+                        decoration: BoxDecoration(
+
+                          borderRadius: BorderRadius.circular(40),
                         ),
-                        color: Colors.white,
+                        child: AudioRecorderWidget(),
                       ),
                     ),
+            Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+
+                          color:  Colors.blue,
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        child: IconButton(
+                          padding: const EdgeInsets.only(left: 2),
+                          onPressed: () {
+                            var text = messageController.text;
+                            print("📲 onPressed send message::: $text");
+
+                            // add message to the list
+                            var messageJson = {
+                              "sender": myUsername,
+                              "receiver": FriendUsername,
+                              "message": text,
+                              "timestamp": DateTime.now().toString(),
+                              "type": "text"
+                            };
+                            Message message = Message.fromJson(messageJson);
+
+                            /// send message to server
+                            if (text.isNotEmpty) {
+                              print("message is not empty $messageJson");
+                              getController.sendMessage(jsonEncode(messageJson));
+                              setState(() {
+                                getController.myMessages.add(message);
+                              });
+                              messageController.clear();
+                            }
+
+                            /// scroll to bottom of the list
+                            Scroll_to_bottom(getController.scrollController);
+                          },
+                          icon: const Icon(
+                            Icons.send_rounded,
+                            color: Colors.white,
+                          ),
+                          color: Colors.white,
+                        ),
+                      ),
+
                   ],
                 ),
               ),

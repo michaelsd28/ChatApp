@@ -3,13 +3,20 @@ import 'dart:convert';
 
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:chat_app/model/MongoDB/Operations.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 // import http
 import 'package:http/http.dart' as http;
+
+import '../GetController.dart';
 
 class AddFriend_Service implements Operation {
 
   String name;
   String username;
+  // get controller
+  final GetController getController = Get.put(GetController());
+
 
 
 
@@ -19,7 +26,7 @@ class AddFriend_Service implements Operation {
   Future<void> execute() async {
 
     var globalStore = GlobalStore.getInstance();
-    var token = globalStore.local_storage.getItem("JWT_token");
+    var token = getController.jwtToken;
 /// allow all cors
     var headers = {
       'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE', 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization', 'Access-Control-Allow-Credentials': 'true'
@@ -47,11 +54,12 @@ class AddFriend_Service implements Operation {
 
     if (bodyJson["status"] == "success") {
       print("AddFriend_Service::  ${await response.stream.bytesToString()}");
-      globalStore.local_storage.setItem("isFriendAdded","true");
+      // getController.isFriendAdded.value = true;
+      // globalStore.local_storage.setItem("isFriendAdded","true");
     }
     else if (bodyJson["status"] == "fail") {
       print("AddFriend_Service::  ${await response.stream.bytesToString()}");
-      globalStore.local_storage.setItem("isFriendAdded","false");
+      // globalStore.local_storage.setItem("isFriendAdded","false");
     }
 
 

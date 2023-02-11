@@ -37,8 +37,8 @@ class _DashboardState extends State<Dashboard> {
 
   void handleSocketLogin() {
     GlobalStore store = GlobalStore.getInstance();
-    String token = store.local_storage.getItem("JWT_token");
-    String MyUsername = store.local_storage.getItem("MyUsername");
+    String token = getController.jwtToken;
+    String MyUsername = getController.myUsername;
 
     getController.channel!.sink.add(jsonEncode({"username": MyUsername, "token": token}));
   }
@@ -111,8 +111,10 @@ class UserFriend_widget extends StatelessWidget {
   final String? username;
   final String? lastMessage;
   final String? image;
+  // get controller
+  final GetController getController = Get.put(GetController());
 
-  const UserFriend_widget({Key? key, required this.username, required this.lastMessage, required this.image}) : super(key: key);
+   UserFriend_widget({Key? key, required this.username, required this.lastMessage, required this.image}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -129,9 +131,11 @@ class UserFriend_widget extends StatelessWidget {
       title: Text(username!, style: const TextStyle(color: Colors.white)),
       subtitle: Text(lastMessage!, style: const TextStyle(color: Colors.white)),
       onTap: () {
-        print("onTap: () ->  username: $username");
+
         GlobalStore globalStore = GlobalStore.getInstance();
-        globalStore.local_storage.setItem("FriendUsername", username);
+
+        getController.FriendUsername = username!;
+
 
         var route = MaterialPageRoute(
           builder: (BuildContext context) => MainChat(),

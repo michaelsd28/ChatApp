@@ -188,7 +188,8 @@ class _SignUp_widgetState extends State<SignUp_widget> {
 
                                 // pop up message to show that the user has been created
                                 GlobalStore   globalStore = GlobalStore.getInstance();
-                               String didSignUP = globalStore.local_storage.getItem("DidSignUp");
+                               // String didSignUP = globalStore.local_storage.getItem("DidSignUp");
+                                String didSignUP = "false";
 
 
                                if (didSignUP == "true") {

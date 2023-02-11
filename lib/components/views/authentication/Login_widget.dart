@@ -1,13 +1,15 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:chat_app/components/views/chat/AudioPlayerWidget.dart';
+import 'package:chat_app/components/views/chat/AudioRecorderWidget.dart';
 import 'package:chat_app/components/views/dashboard/Dashboard.dart';
 import 'package:chat_app/components/views/sign_up/SignUp_widget.dart';
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:chat_app/model/MongoDB/LoginUser.dart';
 import 'package:chat_app/model/MongoDB/MongoDBService.dart';
+import 'package:chat_app/model/MongoDB/UploadAudio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:record/record.dart';
 import '../../../model/Classes/User.dart';
 import '../../../model/GetController.dart';
 
@@ -21,6 +23,7 @@ class Login_widget extends StatefulWidget {
 class _Login_widgetState extends State<Login_widget> {
   var usernameController = TextEditingController();
   var passwordController = TextEditingController();
+  GetController getController = Get.put(GetController());
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +42,9 @@ class _Login_widgetState extends State<Login_widget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
+                AudioPlayerWidget(audioID: "63e4ad6ea19d8e4d2b30d949"),
+                PreviewAudioPlayerWidget(),
+                const AudioRecorderWidget(),
                 const SizedBox(
                   height: 80,
                   child: Text(
@@ -231,16 +237,17 @@ class _Login_widgetState extends State<Login_widget> {
 
   void _login(BuildContext context, String username, String password) async {
     GlobalStore globalStore = GlobalStore.getInstance();
-    globalStore.local_storage.setItem("MyUsername", username);
 
     User user = User(username: username, password: password);
+
+    getController.myUsername = username;
 
     LoginUser loginUser = LoginUser(user);
     MongoDBService mongoDBService = MongoDBService(loginUser);
     await mongoDBService.execute();
     GlobalStore store = GlobalStore.getInstance();
 
-    String? jwt = store.local_storage.getItem("JWT_token");
+    String? jwt = getController.jwtToken;
 
     // print("Login_widget * jwt: $jwt");
 
@@ -260,3 +267,4 @@ class _Login_widgetState extends State<Login_widget> {
     }
   }
 }
+
