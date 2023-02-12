@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:chat_app/model/GlobalStore.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +14,7 @@ class GetController extends GetxController {
   String FriendUsername = "";
   String jwtToken = "";
   String currentAudioID = "";
+  Uint8List currentAudioBytes = Uint8List(0);
 
   ScrollController scrollController = ScrollController(
     keepScrollOffset: false,

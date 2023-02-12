@@ -1,8 +1,11 @@
 import 'dart:typed_data';
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
 import 'package:audioplayers/audioplayers.dart';
+import 'package:chat_app/model/GetController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 // import http package
 import 'package:http/http.dart' as http;
@@ -22,6 +25,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   final player = AudioPlayer();
   double duration = 1;
   double position = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +138,7 @@ class _PreviewAudioPlayerWidgetState extends State<PreviewAudioPlayerWidget> {
   final player = AudioPlayer();
   double duration = 1;
   double position = 0;
+  GetController getController = Get.put(GetController());
 
   @override
   Widget build(BuildContext context) {
@@ -150,19 +155,14 @@ class _PreviewAudioPlayerWidgetState extends State<PreviewAudioPlayerWidget> {
               IconButton(
                 color: Colors.blueGrey,
                 onPressed: () async {
-                  if (isPlaying) {
-                    await player.pause();
-                    setState(() {
-                      isPlaying = false;
-                    });
-                  } else {
+                  if (!isPlaying) {
                     String audioPath = 'assets/recordings/audio-recording.wav';
 
                     Source audioSource = DeviceFileSource(audioPath);
 
                     if (Platform.isAndroid) {
-                      audioPath = "recordings/audio-recording.wav";
-                      audioSource = AssetSource(audioPath);
+                      getController.currentAudioBytes = await File("/storage/emulated/0/Download/audio-recording-2.wav").readAsBytes();
+                      audioSource = BytesSource(getController.currentAudioBytes);
                     }
 
                     await player.play(audioSource);
@@ -197,6 +197,11 @@ class _PreviewAudioPlayerWidgetState extends State<PreviewAudioPlayerWidget> {
                     });
                     setState(() {
                       isPlaying = true;
+                    });
+                  } else {
+                    await player.pause();
+                    setState(() {
+                      isPlaying = false;
                     });
                   }
                 },

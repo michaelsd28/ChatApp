@@ -44,6 +44,7 @@ class _Login_widgetState extends State<Login_widget> {
 
                 AudioPlayerWidget(audioID: "63e4ad6ea19d8e4d2b30d949"),
                 PreviewAudioPlayerWidget(),
+
                 const AudioRecorderWidget(),
                 const SizedBox(
                   height: 80,
