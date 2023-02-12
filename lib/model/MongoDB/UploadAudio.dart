@@ -30,7 +30,6 @@ class UploadAudio implements Operation {
       request.files.add(await http.MultipartFile.fromPath('file', filePath, contentType: MediaType('audio', 'wav')));
     }
 
-
     if (Platform.isAndroid) {
       request.files.add(http.MultipartFile.fromBytes(
         'file',
